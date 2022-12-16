@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "373817920755",
-    "project_id": "animengine-9ccdf",
-    "storage_bucket": "animengine-9ccdf.appspot.com"
+    "project_number": "237286216407",
+    "project_id": "animengine-fb858",
+    "storage_bucket": "animengine-fb858.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:373817920755:android:b12850616a0853b1577b86",
+        "mobilesdk_app_id": "1:237286216407:android:471c4810e6fd5524ae5692",
         "android_client_info": {
-          "package_name": "AnimEngine.myapplication"
+          "package_name": "AnimEngine.mobile"
         }
       },
       "oauth_client": [
         {
-          "client_id": "373817920755-n88pnkcks07acq0b02679lidor5g0iek.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "AnimEngine.myapplication",
-            "certificate_hash": "bd5d006fcbacb01c27f4186f7950d6f9f73b84e1"
-          }
-        },
-        {
-          "client_id": "373817920755-b40vj05pj8v8bcb1b6jo91e86dfnpm0h.apps.googleusercontent.com",
+          "client_id": "237286216407-snehu14bfodfu3jvvvbocg9qrko3vo6c.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDnOqJyVsIKUcSomGYKXNpyyENoahrDcSk"
+          "current_key": "AIzaSyAAYMnV4cjB7STkqP8_iNrbHS41zlJJjvQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "373817920755-b40vj05pj8v8bcb1b6jo91e86dfnpm0h.apps.googleusercontent.com",
+              "client_id": "237286216407-snehu14bfodfu3jvvvbocg9qrko3vo6c.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

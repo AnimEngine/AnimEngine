@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'AnimEngine.myapplication'
+    namespace 'AnimEngine.mobile'
     compileSdk 32
 
     defaultConfig {
-        applicationId "AnimEngine.myapplication"
+        applicationId "AnimEngine.mobile"
         minSdk 21
         targetSdk 32
         versionCode 1
