@@ -1,4 +1,4 @@
-package AnimEngine.myapplication;
+package AnimEngine.mobile;
 
 import android.content.Context;
 

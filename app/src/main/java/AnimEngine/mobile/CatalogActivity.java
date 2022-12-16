@@ -1,25 +1,18 @@
-package AnimEngine.myapplication;
+package AnimEngine.mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.widget.TextView;
 
 
-
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-
 import java.util.ArrayList;
 
-import AnimEngine.myapplication.utils.Anime;
+import AnimEngine.mobile.utils.Anime;
 
 public class CatalogActivity extends AppCompatActivity {
 

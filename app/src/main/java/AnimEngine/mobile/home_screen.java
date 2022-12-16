@@ -1,11 +1,10 @@
-package AnimEngine.myapplication;
+package AnimEngine.mobile;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,8 +20,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import AnimEngine.myapplication.utils.DB;
-import AnimEngine.myapplication.utils.User;
+import AnimEngine.mobile.utils.DB;
+import AnimEngine.mobile.utils.User;
 
 public class home_screen extends AppCompatActivity implements View.OnClickListener {
 

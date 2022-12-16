@@ -1,10 +1,8 @@
-package AnimEngine.myapplication;
+package AnimEngine.mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -15,13 +13,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import AnimEngine.myapplication.utils.DB;
+import AnimEngine.mobile.utils.DB;
 
 public class SelectActivity extends AppCompatActivity implements View.OnClickListener {
 

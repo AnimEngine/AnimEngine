@@ -1,10 +1,6 @@
-package AnimEngine.myapplication;
-
-import android.widget.ImageView;
+package AnimEngine.mobile;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-
-import java.util.function.Consumer;
 
 public interface storageInterface {
     //gets command//

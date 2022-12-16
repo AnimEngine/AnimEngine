@@ -1,4 +1,4 @@
-package AnimEngine.myapplication;
+package AnimEngine.mobile;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +14,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
-import AnimEngine.myapplication.utils.DB;
+import AnimEngine.mobile.utils.DB;
 
 public class change_password extends AppCompatActivity implements View.OnClickListener {
     Button change;

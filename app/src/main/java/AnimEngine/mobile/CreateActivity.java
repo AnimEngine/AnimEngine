@@ -1,4 +1,4 @@
-package AnimEngine.myapplication;
+package AnimEngine.mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 

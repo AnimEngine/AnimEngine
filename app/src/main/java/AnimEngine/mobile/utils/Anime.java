@@ -1,4 +1,4 @@
-package AnimEngine.myapplication.utils;
+package AnimEngine.mobile.utils;
 
 import com.google.firebase.database.DatabaseReference;
 
