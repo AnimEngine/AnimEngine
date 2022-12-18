@@ -14,6 +14,6 @@
     <item
         android:id="@+id/profile_page"
         android:enabled="true"
-        android:icon="@drawable/ic_profile_page"
+        android:icon="@drawable/icon_profile_page"
         android:title="@string/profile_page_title"/>
 </menu>

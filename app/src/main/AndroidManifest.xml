@@ -16,6 +16,20 @@
         android:theme="@style/Theme.AnimEngine"
         tools:targetApi="31">
         <activity
+            android:name=".ProfileActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activity_sign_up"
             android:exported="false">
             <meta-data
