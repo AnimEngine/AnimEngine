@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import AnimEngine.mobile.utils.Anime;
+import AnimEngine.mobile.Anime;
 
 public class CatalogRVAdapter extends RecyclerView.Adapter<CatalogRVAdapter.MyViewHolder> {
     //logic

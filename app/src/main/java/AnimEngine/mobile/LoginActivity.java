@@ -20,6 +20,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import AnimEngine.mobile.util.CheckEmail;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     EditText editTextEmail, editTextPassword;
@@ -62,13 +64,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if(view == findViewById(R.id.button_login)){
             String mailInput = editTextEmail.getText().toString();
-            Pattern pattern = Pattern.compile("([a-zA-Z0-9]+)([_.-]{1}[a-zA-Z0-9]+)*@([a-zA-Z0-9])+(-{1}[a-zA-Z0-9]+)*(\\.([a-zA-Z]{2,}))+", Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(mailInput);
-            if(matcher.matches()){
-                Toast.makeText(getApplicationContext(),"you ok",Toast.LENGTH_SHORT).show();
-            }
-            else{
-                Toast.makeText(getApplicationContext(),"Invalid Email",Toast.LENGTH_SHORT).show();
+            CheckEmail emailChecker = new CheckEmail();
+
+            if(!emailChecker.isValidEmail(mailInput)){
+                Toast.makeText(getApplicationContext(),"Invalid Email!",Toast.LENGTH_SHORT).show();
             }
         }
 
