@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="Welcome"
-    />
+        />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/text_top_navigation_type"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="200sp"
         android:layout_centerHorizontal="true"
-        android:hint="First Name">
+        android:hint="Company name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -39,23 +39,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_last_name_sign_up"
-        android:layout_width="300sp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/text_input_first_name_sign_up_creator"
-        android:layout_marginTop="5sp"
-        android:hint="Last Name">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:inputType="textEmailAddress" />
-
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_email_sign_up_creator"
@@ -63,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5sp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/text_input_last_name_sign_up"
+        android:layout_below="@id/text_input_first_name_sign_up_creator"
         android:hint="Email">
 
         <com.google.android.material.textfield.TextInputEditText
