@@ -33,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if(view == findViewById(R.id.text_link_sign_in)) {
             Intent ActivitysignIn = new Intent(this, LoginActivity.class);
             startActivity(ActivitysignIn);
+            finish();
         }
     }
 }

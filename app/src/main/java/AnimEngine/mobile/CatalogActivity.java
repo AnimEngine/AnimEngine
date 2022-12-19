@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import AnimEngine.mobile.utils.Anime;
+import AnimEngine.mobile.Anime;
 
 public class CatalogActivity extends AppCompatActivity {
 

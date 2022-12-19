@@ -1,11 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ProfileActivity">
+
+    <EditText
+        android:id="@+id/text_title_profile_client"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Profile"
+        android:textSize="25dp"
+        android:layout_centerHorizontal="true"
+        />
+
+
+    <EditText
+        android:id="@+id/text_profile_name_client"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_title_profile_client"
+        android:layout_marginLeft="10dp"
+        android:text="Name"
+        />
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -15,5 +47,8 @@
         android:layout_marginTop="670dp"
         app:menu="@menu/bottom_navigation_menu_client_app" />
 
-</LinearLayout>
+</RelativeLayout>
+
+
+
 

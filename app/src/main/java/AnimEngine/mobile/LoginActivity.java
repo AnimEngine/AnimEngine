@@ -2,6 +2,7 @@ package AnimEngine.mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -31,7 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.text_link_forgot_password).setOnClickListener(this);
         findViewById(R.id.text_link_forgot_password).setOnClickListener(this);
         findViewById(R.id.button_login).setOnClickListener(this);
-
+        findViewById(R.id.text_link_sign_up).setOnClickListener(this);
 
         TextInputLayout mi = findViewById(R.id.text_input_email_login);
         editTextEmail = mi.getEditText();
@@ -71,8 +72,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
 
-        else{
-            System.out.println("hi");
+        if(view == findViewById(R.id.text_link_sign_up)){
+            Intent i = new Intent(this, RegisterActivity.class);
+            startActivity(i);
+            finish();
         }
     }
 }
