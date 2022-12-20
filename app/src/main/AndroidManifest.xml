@@ -37,13 +37,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".UserActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
@@ -58,20 +51,6 @@
         </activity>
         <activity
             android:name=".CreateActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".CreatorUserProfileActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".UserProfileActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

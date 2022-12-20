@@ -9,6 +9,6 @@ public class CreatorUserProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_creator_user_profile);
+        setContentView(R.layout.activity_creator_user_profile);
     }
 }

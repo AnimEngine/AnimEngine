@@ -1,28 +1,28 @@
 package AnimEngine.mobile;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import AnimEngine.mobile.adapters.SectionsPagerAdapter;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     ViewPager2 myViewPager2;
     SectionsPagerAdapter myAdapter;
@@ -60,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         findViewById(R.id.text_link_sign_in_creator).setOnClickListener(this);
         findViewById(R.id.button_sign_up_creator).setOnClickListener(this);
+
     }
 
     @Override
@@ -85,6 +86,26 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     String lNameInput = String.valueOf(fanEditTexts.get(1).getText());
                     String fanEmailInput = String.valueOf(fanEditTexts.get(2).getText());
                     String fanPasswordInput = String.valueOf(fanEditTexts.get(3).getText());
+
+                    CheckEmail emailChecker = new CheckEmail();
+
+                    if(!emailChecker.isValidEmail(fanEmailInput)) {
+                        Toast.makeText(getApplicationContext(), "Invalid Email!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if(fanPasswordInput.length()<6) {
+                        Toast.makeText(getApplicationContext(), "Password has to be at least 6 characters long!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if(fNameInput.length()==0 || lNameInput.length()==0) {
+                        Toast.makeText(getApplicationContext(), "Please make sure to fill all fields!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    register(new Fan(fanEmailInput, fanPasswordInput,"fan", fNameInput,lNameInput))
+
                     break;
                 default:
                     break;
@@ -92,5 +113,26 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
 
+    }
+
+    private void register(User user){
+        // Create the arguments to the callable function.
+        Gson gson = new Gson();
+        String jsonToSend = gson.toJson(user);
+
+        this.mFunctions
+                .getHttpsCallable("register")
+                .call(jsonToSend).addOnCompleteListener(task -> {
+                    HashMap map = (HashMap) task.getResult().getData();
+                    if(map == null){
+                        Toast.makeText(getApplicationContext(),"Registering Failed, Try again!",Toast.LENGTH_SHORT).show();
+                    }else {
+                        if (map.containsKey("ok")) {
+                            Toast.makeText(getApplicationContext(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), (String) map.get("error"), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
