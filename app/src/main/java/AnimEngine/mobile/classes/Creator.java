@@ -1,12 +1,12 @@
 package AnimEngine.mobile.classes;
 
 public class Creator extends User{
-    private String webAddress, country;
+    private String webAddress, studioName;
 
-    public Creator(String email, String password, String type, String webAddress, String country) {
+    public Creator(String email, String password, String type, String webAddress, String studioName) {
         super(email, password, type);
         this.webAddress = webAddress;
-        this.country = country;
+        this.studioName = studioName;
     }
 
     public String getWebAddress() {
@@ -17,11 +17,11 @@ public class Creator extends User{
         this.webAddress = webAddress;
     }
 
-    public String getCountry() {
-        return country;
+    public String getStudioName() {
+        return studioName;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setStudioName(String studioName) {
+        this.studioName = studioName;
     }
 }

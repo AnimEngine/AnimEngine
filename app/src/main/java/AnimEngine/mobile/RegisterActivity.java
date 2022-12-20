@@ -7,22 +7,26 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import AnimEngine.mobile.adapters.SectionsPagerAdapter;
+import AnimEngine.mobile.classes.Creator;
+import AnimEngine.mobile.classes.Fan;
+import AnimEngine.mobile.classes.User;
+import AnimEngine.mobile.util.CheckEmail;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private FirebaseFunctions mFunctions;
 
     ViewPager2 myViewPager2;
     SectionsPagerAdapter myAdapter;
@@ -38,6 +42,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        this.mFunctions = FirebaseFunctions.getInstance();
 
         myViewPager2 = findViewById(R.id.view_pager_register);
         myAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getLifecycle());
@@ -72,6 +78,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
         if(view == findViewById(R.id.button_sign_up_creator)){
+            CheckEmail emailChecker = new CheckEmail();
             switch (myViewPager2.getCurrentItem()){
                 case 0:// Creator
                     String studioNameInput = String.valueOf(creatorEditTexts.get(0).getText());
@@ -79,15 +86,28 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     String creatorEmailInput = String.valueOf(creatorEditTexts.get(2).getText());
                     String creatorPasswordInput = String.valueOf(creatorEditTexts.get(3).getText());
 
-                    Toast.makeText(getApplicationContext(),studioNameInput+ " "+websiteInput,Toast.LENGTH_SHORT).show();
+                    if(!emailChecker.isValidEmail(creatorEmailInput)) {
+                        Toast.makeText(getApplicationContext(), "Invalid Email!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if(creatorPasswordInput.length()<6) {
+                        Toast.makeText(getApplicationContext(), "Password has to be at least 6 characters long!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if(studioNameInput.length()==0 || websiteInput.length()==0) {
+                        Toast.makeText(getApplicationContext(), "Please make sure to fill all fields!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    register(new Creator(creatorEmailInput, creatorPasswordInput,"creator",websiteInput ,studioNameInput));
                     break;
                 case 1:// Fan
                     String fNameInput = String.valueOf(fanEditTexts.get(0).getText());
                     String lNameInput = String.valueOf(fanEditTexts.get(1).getText());
                     String fanEmailInput = String.valueOf(fanEditTexts.get(2).getText());
                     String fanPasswordInput = String.valueOf(fanEditTexts.get(3).getText());
-
-                    CheckEmail emailChecker = new CheckEmail();
 
                     if(!emailChecker.isValidEmail(fanEmailInput)) {
                         Toast.makeText(getApplicationContext(), "Invalid Email!", Toast.LENGTH_SHORT).show();
@@ -104,8 +124,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         return;
                     }
 
-                    register(new Fan(fanEmailInput, fanPasswordInput,"fan", fNameInput,lNameInput))
-
+                    register(new Fan(fanEmailInput, fanPasswordInput,"fan", fNameInput,lNameInput));
                     break;
                 default:
                     break;
