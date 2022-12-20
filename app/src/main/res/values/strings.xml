@@ -6,6 +6,6 @@
     <string name="home_page_title">Home</string>
     <string name="catalog_page_title">Catalog</string>
 
-    <string name="first_fragment_label">first_fragment_label</string>
-    <string name="second_fragment_label">second_fragment_label</string>
+    <string name="register_creator_fragment_label">Creator</string>
+    <string name="register_fan_fragment_label">Fan</string>
 </resources>

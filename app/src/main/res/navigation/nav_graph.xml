@@ -3,26 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/CreatorFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="AnimEngine.mobile.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        android:id="@+id/CreatorFragment"
+        android:name="AnimEngine.mobile.CreatorFragment"
+        android:label="@string/register_creator_fragment_label"
+        tools:layout="@layout/fragment_register_creator">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_CreatorFragment_to_FanFragment"
+            app:destination="@id/FanFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="AnimEngine.mobile.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/FanFragment"
+        android:name="AnimEngine.mobile.FanFragment"
+        android:label="@string/register_fan_fragment_label"
+        tools:layout="@layout/fragment_register_fan">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_FanFragment_to_CreatorFragment"
+            app:destination="@id/CreatorFragment" />
     </fragment>
 </navigation>

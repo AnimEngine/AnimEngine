@@ -8,98 +8,34 @@
     >
 
     <EditText
+        android:id="@+id/text_register_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="Welcome"
     />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/text_top_navigation_type"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        app:menu="@menu/top_navigation_choose_type" />
+        android:layout_below="@+id/text_register_title"
+        android:layout_marginTop="10dp"
+        />
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_first_name_sign_up_creator"
-        android:layout_width="300sp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="200sp"
-        android:layout_centerHorizontal="true"
-        android:hint="First Name">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:inputType="textEmailAddress" />
-
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_last_name_sign_up"
-        android:layout_width="300sp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/text_input_first_name_sign_up_creator"
-        android:layout_marginTop="5sp"
-        android:hint="Last Name">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:inputType="textEmailAddress" />
-
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_email_sign_up_creator"
-        android:layout_width="300sp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5sp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/text_input_last_name_sign_up"
-        android:hint="Email">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:inputType="textEmailAddress" />
-
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_password_sign_up_creator"
-        android:layout_width="300sp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_input_email_sign_up_creator"
-        android:layout_marginTop="5dp"
-        android:textSize="12sp"
-        android:layout_centerHorizontal="true"
-        android:hint="Password" >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text_sign_up_password_creator"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:inputType="textPassword" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager_register"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_below="@id/tabs_register"
+        />
 
     <Button
         android:id="@+id/button_sign_up_creator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/text_input_password_sign_up_creator"
+        android:layout_below="@id/view_pager_register"
 
         android:text="Sign up"
         />
@@ -137,3 +73,84 @@
 
 
 </RelativeLayout>
+
+
+    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+    <!--        android:id="@+id/text_top_navigation_type"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="140dp"-->
+    <!--        app:menu="@menu/top_navigation_choose_type" />-->
+
+
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+    <!--        android:id="@+id/text_input_first_name_sign_up_creator"-->
+    <!--        android:layout_width="300sp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="200sp"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:hint="First Name">-->
+
+    <!--        <com.google.android.material.textfield.TextInputEditText-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:textSize="12sp"-->
+    <!--            android:inputType="textEmailAddress" />-->
+
+
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+    <!--        android:id="@+id/text_input_last_name_sign_up"-->
+    <!--        android:layout_width="300sp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:layout_below="@id/text_input_first_name_sign_up_creator"-->
+    <!--        android:layout_marginTop="5sp"-->
+    <!--        android:hint="Last Name">-->
+
+    <!--        <com.google.android.material.textfield.TextInputEditText-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:textSize="12sp"-->
+    <!--            android:inputType="textEmailAddress" />-->
+
+
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+    <!--        android:id="@+id/text_input_email_sign_up_creator"-->
+    <!--        android:layout_width="300sp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="5sp"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:layout_below="@id/text_input_last_name_sign_up"-->
+    <!--        android:hint="Email">-->
+
+    <!--        <com.google.android.material.textfield.TextInputEditText-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:textSize="12sp"-->
+    <!--            android:inputType="textEmailAddress" />-->
+
+
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+    <!--        android:id="@+id/text_input_password_sign_up_creator"-->
+    <!--        android:layout_width="300sp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_below="@id/text_input_email_sign_up_creator"-->
+    <!--        android:layout_marginTop="5dp"-->
+    <!--        android:textSize="12sp"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:hint="Password" >-->
+
+    <!--        <com.google.android.material.textfield.TextInputEditText-->
+    <!--            android:id="@+id/edit_text_sign_up_password_creator"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:textSize="12sp"-->
+    <!--            android:inputType="textPassword" />-->
+
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
