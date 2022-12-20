@@ -57,8 +57,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText editTextFirstName, editTextLastName, editTextEmail, editTextPassword;
     private FirebaseFunctions mFunctions;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,12 +103,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 Toast.makeText(getApplicationContext(), "Please make sure to fill all fields!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            try {
-                register(new Fan(email, password,"fan", fName,lName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //
+
+            register(new Fan(email, password,"fan", fName,lName));
+
         }
 
         if(view == findViewById(R.id.text_link_sign_in)) {
@@ -120,15 +115,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void register(User user) throws IOException {
+    private void register(User user){
         // Create the arguments to the callable function.
         Gson gson = new Gson();
         String jsonToSend = gson.toJson(user);
 
-        String URL = "https://us-central1-animengine-fb858.cloudfunctions.net/register";
-
         this.mFunctions
-                .getHttpsCallableFromUrl(new URL(URL))
+                .getHttpsCallable("register")
                 .call(jsonToSend).addOnCompleteListener(task -> {
                     HashMap map = (HashMap) task.getResult().getData();
                     if(map == null){
@@ -141,72 +134,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         }
                     }
                 });
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-//                Request.Method.POST,
-//                URL,
-//                json,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//
-//                        // Handle the response
-//
-//                    }
-//                },
-//
-//                new Response.ErrorListener(){
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//
-//                        // Handle the error
-//
-//                    }
-//                });
-
-//        try {
-//            URL url = new URL("https://us-central1-animengine-fb858.cloudfunctions.net/register"); //in the real code, there is an ip and a port
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//            conn.setRequestMethod("POST");
-//            conn.setRequestProperty("Content-Type", "application/json");
-//            conn.setRequestProperty("Accept","application/json");
-//            conn.setDoOutput(true);
-//            conn.setDoInput(true);
-//
-//
-//
-//            DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-//            os.writeBytes(jsonToSend);
-//
-//            os.flush();
-//            os.close();
-//            conn.connect();
-//            Toast.makeText(getApplicationContext(),conn.getResponseMessage(),Toast.LENGTH_SHORT).show();
-//
-//            conn.disconnect();
-//        } catch (Exception e) {
-//
-//        }
-
-//        OutputStream out = null;
-//        try {
-//            URL url = new URL("https://us-central1-animengine-fb858.cloudfunctions.net/register");
-//            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-//            urlConnection.setRequestMethod("POST");
-//            urlConnection.setRequestProperty("Content-Type", "application/json");
-//            out = new BufferedOutputStream(urlConnection.getOutputStream());
-//
-//            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
-//            writer.write(jsonToSend);
-//            writer.flush();
-//            writer.close();
-//            out.close();
-//
-//            urlConnection.connect();
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
-
-
-//
     }
 }
