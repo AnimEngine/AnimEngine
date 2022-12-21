@@ -11,11 +11,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FanFragment extends Fragment {
-    ArrayList<EditText> list;
-    public FanFragment(ArrayList<EditText> list){
-        this.list = list;
+    HashMap<String, EditText> map;
+
+    public FanFragment(HashMap<String, EditText> map){
+        this.map = map;
     }
 
     @Override
@@ -23,10 +25,10 @@ public class FanFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register_fan,container,false);
 
-        this.list.add(((TextInputLayout)view.findViewById(R.id.text_input_first_name_sign_up_fan)).getEditText());
-        this.list.add(((TextInputLayout)view.findViewById(R.id.text_input_last_name_sign_up_fan)).getEditText());
-        this.list.add(((TextInputLayout)view.findViewById(R.id.text_input_email_sign_up_fan)).getEditText());
-        this.list.add(((TextInputLayout)view.findViewById(R.id.text_input_password_sign_up_fan)).getEditText());
+        this.map.put("email", ((TextInputLayout)view.findViewById(R.id.text_input_email_sign_up_fan)).getEditText());
+        this.map.put("password", ((TextInputLayout)view.findViewById(R.id.text_input_password_sign_up_fan)).getEditText());
+        this.map.put("fName", ((TextInputLayout)view.findViewById(R.id.text_input_first_name_sign_up_fan)).getEditText());
+        this.map.put("lName", ((TextInputLayout)view.findViewById(R.id.text_input_last_name_sign_up_fan)).getEditText());
 
         return view;
     }

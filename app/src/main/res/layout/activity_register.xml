@@ -29,22 +29,44 @@
         android:layout_height="400dp"
         android:layout_below="@id/tabs_register"
         />
-
-    <Button
-        android:id="@+id/button_sign_up_creator"
+    <LinearLayout
+        android:id="@+id/layout_couple_button_loading_anim_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/view_pager_register"
+        android:orientation="horizontal">
+    <Button
+        android:id="@+id/button_sign_up_creator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
         android:text="Sign up"
         />
 
+        <ProgressBar
+            android:id="@+id/progress_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+
+            android:maxHeight="35dp"
+            android:minHeight="35dp"
+
+            android:minWidth="35dp"
+            android:maxWidth="35dp"
+
+            android:indeterminate="true"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/black"
+            android:visibility="visible"
+            />
+    </LinearLayout>
     <TextView
         android:id="@+id/text_exist_account_creator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/button_sign_up_creator"
+        android:layout_below="@id/layout_couple_button_loading_anim_register"
         android:textAlignment="center"
 
         android:textSize="12sp"
@@ -58,7 +80,7 @@
         android:id="@+id/text_link_sign_in_creator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/button_sign_up_creator"
+        android:layout_below="@id/layout_couple_button_loading_anim_register"
         android:textAlignment="center"
         android:layout_toRightOf="@id/text_exist_account_creator"
         android:textSize="12sp"

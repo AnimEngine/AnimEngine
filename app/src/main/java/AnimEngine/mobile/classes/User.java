@@ -1,5 +1,9 @@
 package AnimEngine.mobile.classes;
 
+import android.widget.EditText;
+
+import java.util.HashMap;
+
 public class User {
     private String Email, Password, Type;
     public User(String email, String password, String type){

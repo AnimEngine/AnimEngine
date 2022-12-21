@@ -1,6 +1,7 @@
 package AnimEngine.mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -17,25 +19,29 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 import AnimEngine.mobile.adapters.SectionsPagerAdapter;
 import AnimEngine.mobile.classes.Creator;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.User;
+import AnimEngine.mobile.models.userModel;
 import AnimEngine.mobile.util.CheckEmail;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, Observer {
 
-    private FirebaseFunctions mFunctions;
+    userModel model;
+
+    HashMap<String, EditText> creatorEditTexts = new HashMap<>();
+    HashMap<String, EditText> fanEditTexts = new HashMap<>();
 
     ViewPager2 myViewPager2;
     SectionsPagerAdapter myAdapter;
 
     Fragment creatorFragment, fanFragment;
 
-    ArrayList<EditText> creatorEditTexts = new ArrayList<>();
-    ArrayList<EditText> fanEditTexts = new ArrayList<>();
-
+    ProgressBar progressBar;
     private static final int[] TAB_TITLES = new int[]{R.string.register_creator_fragment_label, R.string.register_fan_fragment_label};
 
     @Override
@@ -43,7 +49,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        this.mFunctions = FirebaseFunctions.getInstance();
+        model = new userModel();
+        model.addObserver(this);
 
         myViewPager2 = findViewById(R.id.view_pager_register);
         myAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getLifecycle());
@@ -67,91 +74,105 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.text_link_sign_in_creator).setOnClickListener(this);
         findViewById(R.id.button_sign_up_creator).setOnClickListener(this);
 
+        progressBar = findViewById(R.id.progress_register);
+        stopLoadingAnimation();
+
+    }
+
+    public void startLoadingAnimation(){
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void stopLoadingAnimation(){
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onClick(View view) {
         if(view == findViewById(R.id.text_link_sign_in_creator)) {
-            Intent ActivitysignIn = new Intent(this, LoginActivity.class);
-            startActivity(ActivitysignIn);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
             finish();
         }
 
         if(view == findViewById(R.id.button_sign_up_creator)){
+            boolean isCreator;
+
+            HashMap<String, EditText> currentMap;
             CheckEmail emailChecker = new CheckEmail();
+            String studioName = "", website = "";
+            String fName = "", lName = "";
+
             switch (myViewPager2.getCurrentItem()){
                 case 0:// Creator
-                    String studioNameInput = String.valueOf(creatorEditTexts.get(0).getText());
-                    String websiteInput = String.valueOf(creatorEditTexts.get(1).getText());
-                    String creatorEmailInput = String.valueOf(creatorEditTexts.get(2).getText());
-                    String creatorPasswordInput = String.valueOf(creatorEditTexts.get(3).getText());
+                    currentMap = creatorEditTexts;
+                    isCreator = true;
 
-                    if(!emailChecker.isValidEmail(creatorEmailInput)) {
-                        Toast.makeText(getApplicationContext(), "Invalid Email!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+                    studioName = String.valueOf(creatorEditTexts.get("studioName").getText());
+                    website = String.valueOf(creatorEditTexts.get("website").getText());
 
-                    if(creatorPasswordInput.length()<6) {
-                        Toast.makeText(getApplicationContext(), "Password has to be at least 6 characters long!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if(studioNameInput.length()==0 || websiteInput.length()==0) {
+                    if(studioName.length()==0 || website.length()==0) {
                         Toast.makeText(getApplicationContext(), "Please make sure to fill all fields!", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    register(new Creator(creatorEmailInput, creatorPasswordInput,"creator",websiteInput ,studioNameInput));
                     break;
                 case 1:// Fan
-                    String fNameInput = String.valueOf(fanEditTexts.get(0).getText());
-                    String lNameInput = String.valueOf(fanEditTexts.get(1).getText());
-                    String fanEmailInput = String.valueOf(fanEditTexts.get(2).getText());
-                    String fanPasswordInput = String.valueOf(fanEditTexts.get(3).getText());
+                    currentMap = fanEditTexts;
+                    isCreator = false;
 
-                    if(!emailChecker.isValidEmail(fanEmailInput)) {
-                        Toast.makeText(getApplicationContext(), "Invalid Email!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+                    fName = String.valueOf(fanEditTexts.get("fName").getText());
+                    lName = String.valueOf(fanEditTexts.get("lName").getText());
 
-                    if(fanPasswordInput.length()<6) {
-                        Toast.makeText(getApplicationContext(), "Password has to be at least 6 characters long!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if(fNameInput.length()==0 || lNameInput.length()==0) {
+                    if(fName.length()==0 || lName.length()==0) {
                         Toast.makeText(getApplicationContext(), "Please make sure to fill all fields!", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    register(new Fan(fanEmailInput, fanPasswordInput,"fan", fNameInput,lNameInput));
                     break;
                 default:
+                    currentMap = fanEditTexts;
+                    isCreator = false;
                     break;
             }
+
+            String email = String.valueOf(currentMap.get("email").getText());
+            String password = String.valueOf(currentMap.get("password").getText());
+
+            if(!emailChecker.isValidEmail(email)) {
+                Toast.makeText(getApplicationContext(), "Invalid Email!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(password.length()<6) {
+                Toast.makeText(getApplicationContext(), "Password has to be at least 6 characters long!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            User user;
+            if(isCreator)
+                user = new Creator(email, password, "creator", studioName, website);
+            else
+                user = new Fan(email, password, "fan", fName, lName);
+
+            this.model.register(user);
+
+            startLoadingAnimation();
         }
-
-
     }
 
-    private void register(User user){
-        // Create the arguments to the callable function.
-        Gson gson = new Gson();
-        String jsonToSend = gson.toJson(user);
+    @Override
+    public void update(Observable observable, Object o) {
+        String result = this.model.getResult();
+        if(result.startsWith("OK")){
+            Toast.makeText(getApplicationContext(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
 
-        this.mFunctions
-                .getHttpsCallable("register")
-                .call(jsonToSend).addOnCompleteListener(task -> {
-                    HashMap map = (HashMap) task.getResult().getData();
-                    if(map == null){
-                        Toast.makeText(getApplicationContext(),"Registering Failed, Try again!",Toast.LENGTH_SHORT).show();
-                    }else {
-                        if (map.containsKey("ok")) {
-                            Toast.makeText(getApplicationContext(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(), (String) map.get("error"), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }else{
+            stopLoadingAnimation();
+
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+        }
     }
 }
