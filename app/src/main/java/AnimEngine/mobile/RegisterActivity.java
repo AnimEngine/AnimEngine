@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        model = new userModel();
+        model = new userModel(null, null);
         model.addObserver(this);
 
         myViewPager2 = findViewById(R.id.view_pager_register);
