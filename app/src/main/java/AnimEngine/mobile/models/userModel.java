@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Observable;
 
 import AnimEngine.mobile.classes.Creator;
@@ -98,13 +99,13 @@ public class userModel extends Observable {
                                                             if (map.containsKey("ok")) {
                                                                 Creator innerCreator = null;
                                                                 Fan innerFan = null;
-                                                                if (((HashMap) map.get("ok")).get("creator") != "null"){
+                                                                if (!Objects.equals((String) ((HashMap) map.get("ok")).get("creator"), "null")){
                                                                     innerCreator = gson.fromJson((String) ((HashMap) map.get("ok")).get("creator"), Creator.class);
                                                                     innerCreator.setEmail(email);
                                                                     innerCreator.setPassword(password);
                                                                 }
 
-                                                                if (((HashMap) map.get("ok")).get("fan") != "null") {
+                                                                if (!Objects.equals((String) ((HashMap) map.get("ok")).get("fan"), "null")){
                                                                     innerFan = gson.fromJson((String) ((HashMap) map.get("ok")).get("fan"), Fan.class);
                                                                     innerFan.setEmail(email);
                                                                     innerFan.setPassword(password);
@@ -156,6 +157,9 @@ public class userModel extends Observable {
     }
 
     public String getResult() {
-        return result;
+        if(this.result != null)
+            return result;
+        else
+            return "";
     }
 }
