@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -89,10 +89,10 @@
         >
 
 
-        <EditText
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email         "
+            android:text="Email"
             />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -106,7 +106,8 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:layout_marginLeft="60sp"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
