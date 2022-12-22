@@ -3,11 +3,6 @@ const functions = require("firebase-functions");
 const admin = require('firebase-admin');
 const { auth } = require("firebase-admin");
 
-// var serviceAccount = require("C:\\Users\\gilig\\Desktop\\Firebase\\functions\\animengine-fb858-firebase-adminsdk-1l8jr-9df9aa102d.json");
-// admin.initializeApp({
-//     credential: admin.credential.cert(serviceAccount),
-//     databaseURL: "https://animengine-fb858-default-rtdb.firebaseio.com"
-// });
 admin.initializeApp();
 
 const db = admin.database();
@@ -19,11 +14,9 @@ const animeRef = db.ref("/Anime");
 exports.register = functions.https.onRequest(async (request, response) => {
     // Grab the request body as JSON and parse it into a JS object.
     // console.log(request.body);
-    // response.json(request.body);
 
     const json = request.body["data"];
     userObj = JSON.parse(json);
-    //userObj = userObj["data"];
 
     // Extract variables
     const email = userObj["Email"];
@@ -66,31 +59,51 @@ exports.register = functions.https.onRequest(async (request, response) => {
         });
     }
 });
-
 exports.login = functions.https.onRequest(async (request, response) => {
     
     // Grab the request body as JSON and parse it into a JS object.
-    const json = request.body;
-    const userObj = JSON.parse(JSON.stringify(json));
+    const json = request.body["data"];
+    console.log(json);
 
+    const inputObj = JSON.parse(json);
+    console.log(inputObj);
+    // catch(exception){
+    //     console.log(exception);
+    //     response.json({"data":{"error":`input parsing`}});
+    //     return;
+    // }
+    
     // Extract variables
-    const token = userObj["Token"];
-    const userType = userObj["Type"];
+    const token = inputObj["Token"];
+    console.log(token);
 
-    if(userType == "fan")
-        currentRef = fanRef;
-    else
-        currentRef = creatorRef;
-
+    var uid = "";
     await admin.auth().verifyIdToken(token)
         .then((decodedToken) => {
-            const uid = decodedToken.uid;
-
-            response.json(currentRef.child(uid).get());
-            return;
+            uid = decodedToken.uid;
         })
         .catch((error) => {
-            response.json({"error":`${error}`});
+            response.json({"data":{"error":`${error}`}});
             return;
         });
+    
+    var creatorJson;
+    var fanJson;
+
+    await creatorRef.child(uid).get()
+        .then((dataSnapshot) => {creatorJson=dataSnapshot.toJSON()})
+        .catch((error) => {
+            response.json({"data":{"error":`${error}`}});
+            return;
+        });
+        
+    await fanRef.child(uid).get()
+        .then((dataSnapshot) => {fanJson=dataSnapshot.toJSON()})
+        .catch((error) => {
+            response.json({"data":{"error":`${error}`}});
+            return;
+        });
+    
+    response.json({"data":{"ok":{"creator":`${JSON.stringify(creatorJson)}`, "fan":`${JSON.stringify(fanJson)}`}}});
+    return;
 });
