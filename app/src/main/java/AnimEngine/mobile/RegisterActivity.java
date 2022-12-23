@@ -1,23 +1,21 @@
 package AnimEngine.mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.firebase.functions.FirebaseFunctions;
-import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -42,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     Fragment creatorFragment, fanFragment;
 
     ProgressBar progressBar;
+    Button submit;
+    TextView pleaseWait;
     private static final int[] TAB_TITLES = new int[]{R.string.register_creator_fragment_label, R.string.register_fan_fragment_label};
 
     @Override
@@ -75,16 +75,26 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.button_sign_up_creator).setOnClickListener(this);
 
         progressBar = findViewById(R.id.progress_register);
+        submit = findViewById(R.id.button_sign_up_creator);
+        pleaseWait = findViewById(R.id.text_message_please_wait);
         stopLoadingAnimation();
 
     }
 
     public void startLoadingAnimation(){
         progressBar.setVisibility(View.VISIBLE);
+        submit.setClickable(false);
+        submit.setEnabled(false);
+        submit.setVisibility(View.GONE);
+        pleaseWait.setVisibility(View.VISIBLE);
     }
 
     public void stopLoadingAnimation(){
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.GONE);
+        submit.setClickable(true);
+        submit.setEnabled(true);
+        submit.setVisibility(View.VISIBLE);
+        pleaseWait.setVisibility(View.GONE);
     }
 
     @Override

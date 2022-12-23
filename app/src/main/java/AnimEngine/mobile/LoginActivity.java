@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     EditText editTextEmail, editTextPassword;
 
+    ProgressBar progressBar;
+    Button submit;
+    TextView pleaseWait;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,9 +62,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         TextInputLayout pi = findViewById(R.id.text_input_password_login);
         editTextPassword = pi.getEditText();
 
+        progressBar = findViewById(R.id.progress_login);
+        submit = findViewById(R.id.button_login);
+        pleaseWait = findViewById(R.id.text_message_please_wait);
+        stopLoadingAnimation();
 
 
+    }
 
+    public void startLoadingAnimation(){
+        progressBar.setVisibility(View.VISIBLE);
+        submit.setClickable(false);
+        submit.setEnabled(false);
+        submit.setVisibility(View.GONE);
+        pleaseWait.setVisibility(View.VISIBLE);
+    }
+
+    public void stopLoadingAnimation(){
+        progressBar.setVisibility(View.GONE);
+        submit.setClickable(true);
+        submit.setEnabled(true);
+        submit.setVisibility(View.VISIBLE);
+        pleaseWait.setVisibility(View.GONE);
     }
 
     @Override
@@ -85,10 +108,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             if(!emailChecker.isValidEmail(email)){
                 Toast.makeText(getApplicationContext(),"Invalid Email!",Toast.LENGTH_SHORT).show();
+                return;
             }
 
             String password = editTextPassword.getText().toString();
             this.model.login(email, password);
+            startLoadingAnimation();
         }
 
         if(view == findViewById(R.id.text_link_sign_up)){

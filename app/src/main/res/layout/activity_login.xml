@@ -46,23 +46,57 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-        android:id="@+id/button_login"
+    <LinearLayout
+        android:id="@+id/layout_couple_button_loading_anim_login"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/text_input_password_login"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/text_message_please_wait"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:background="@color/white"
+            android:visibility="gone"
+            android:text="PLEASE WAIT"
+            android:textColor="@color/black"
+            />
+        <Button
+            android:id="@+id/button_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            />
 
-        android:text="Login"
-        />
+        <ProgressBar
+            android:id="@+id/progress_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+
+            android:maxHeight="35dp"
+            android:minHeight="35dp"
+
+            android:minWidth="35dp"
+            android:maxWidth="35dp"
+
+            android:indeterminate="true"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/black"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+
 
         <TextView
             android:id="@+id/text_link_forgot_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/button_login"
-            android:textAlignment="center"
-
+            android:layout_below="@id/layout_couple_button_loading_anim_login"
+            android:textAlignment="textStart"
             android:textSize="12sp"
 
             android:text="Forgot password?"
@@ -74,13 +108,14 @@
             android:id="@+id/text_link_forgot_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:layout_toEndOf="@id/text_link_forgot_account"
-            android:layout_below="@id/button_login"
+
+            android:layout_below="@id/layout_couple_button_loading_anim_login"
             android:textSize="12sp"
 
             android:text=" Reset password"
-            android:textColor="@color/purple_200"
+            android:textColor="@color/red"
+            android:textAlignment="center"
             android:layout_centerHorizontal="true"
             android:visibility="visible"
             />
@@ -111,7 +146,7 @@
             android:textSize="12sp"
 
             android:text=" Sign up"
-            android:textColor="@color/purple_200"
+            android:textColor="@color/red"
             android:layout_centerHorizontal="true"
             android:visibility="visible"
             />

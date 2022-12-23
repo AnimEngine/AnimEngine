@@ -18,11 +18,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/catalog_recycler"
-        android:background="@color/purple_200"
+        android:background="@color/red"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
+        android:layout_height="550dp"
         android:layout_below="@+id/catalog_tv"
-
         />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

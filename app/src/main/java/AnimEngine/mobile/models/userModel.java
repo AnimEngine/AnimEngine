@@ -87,7 +87,7 @@ public class userModel extends Observable {
                                         String json = String.format("{\"Token\":\"%s\"}", token);
 
                                         Log.d("login_json", json);
-                                        //result=String.format("{\"Token:\"%s\"\"}", token);
+
                                         mFunctions
                                                 .getHttpsCallable("login")
                                                 .call(json).addOnCompleteListener(functionTask -> {
@@ -119,7 +119,7 @@ public class userModel extends Observable {
                                                                 Log.d("login_map", map.toString());
                                                                 Log.d("login_creator", creator.toString());
                                                                 Log.d("login_fan", fan.toString());
-                                                                //fan.setUser(gson.);
+
                                                             } else {
                                                                 result = "ERROR:"+map.get("error")+"(CLOUD_FUNCTION_RETURN)";
                                                             }
@@ -144,7 +144,7 @@ public class userModel extends Observable {
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            result="ERROR: Login failed!(AUTH)";
+                            result="ERROR: Login failed!(Incorrect Password)";
 
                             creator.setUser(null);
                             fan.setUser(null);
