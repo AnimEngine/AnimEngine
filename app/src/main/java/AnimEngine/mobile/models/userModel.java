@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,14 +26,18 @@ import AnimEngine.mobile.classes.Creator;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.User;
 import AnimEngine.mobile.classes.UserAndToken;
-
 public class userModel extends Observable {
 
     private String result = "";
+    private String action;
     private final FirebaseFunctions mFunctions;
     private final FirebaseAuth mAuth;
 
     private UserAndToken creator, fan;
+
+    public static final String REGISTER = "REGISTER";
+    public static final String LOGIN = "LOGIN";
+    public static final String FORGOT = "FORGOT";
 
     public userModel(UserAndToken creator, UserAndToken fan){
         this.mFunctions = FirebaseFunctions.getInstance();
@@ -57,6 +62,7 @@ public class userModel extends Observable {
                     }else {
                         if (map.containsKey("ok")) {
                             result = "OK";
+                            this.action = REGISTER;
                         } else {
                             result = "ERROR:"+map.get("error");
                         }
@@ -111,7 +117,7 @@ public class userModel extends Observable {
                                                                     innerFan.setPassword(password);
                                                                 }
                                                                 result = "OK";
-
+                                                                action = LOGIN;
 
                                                                 creator.setUser(innerCreator);
                                                                 fan.setUser(innerFan);
@@ -156,10 +162,50 @@ public class userModel extends Observable {
                 });
     }
 
+    public void forgot(String email, String password){
+        String json = String.format("{\"Email\":\"%s\", \"Password\":\"%s\"}", email, password);
+        Log.d("forgot_json", json);
+
+        this.mFunctions
+                .getHttpsCallable("forgot")
+                .call(json).addOnCompleteListener(functionTask -> {
+                    if (functionTask.isSuccessful()) {
+                        HashMap map = (HashMap) functionTask.getResult().getData();
+                        if(map == null){
+                            result = "ERROR";
+                        }
+                        else{
+                            if (map.containsKey("ok")) {
+                                result = "OK";
+                                this.action = FORGOT;
+                                Log.d("forgot_map", map.toString());
+
+                                //fan.setUser(gson.);
+                            }
+                            else {
+                                result = "ERROR:"+map.get("error")+"(CLOUD_FUNCTION_RETURN)";
+                            }
+                        }
+                    }
+                    else{
+                        Log.w("testingos_firebase", functionTask.getException());
+                        result = "ERROR:Password update Failed!(CLOUD_FUNCTION_CALL)";
+                    }
+                    setChanged();
+                    notifyObservers();
+                });
+
+    }
+
+
     public String getResult() {
         if(this.result != null)
             return result;
         else
             return "";
+    }
+
+    public String getAction() {
+        return action;
     }
 }

@@ -128,8 +128,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String result = this.model.getResult();
         if(Objects.equals(result, ""))
             return;
+
         if(result.startsWith("OK")){
-            Toast.makeText(getApplicationContext(), "Logged in Successfully!", Toast.LENGTH_SHORT).show();
+            switch (this.model.getAction()){
+                case userModel.LOGIN:
+                    Toast.makeText(getApplicationContext(), "Logged in Successfully!", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case userModel.FORGOT:
+                    Toast.makeText(getApplicationContext(), "Password updated Successfully!", Toast.LENGTH_SHORT).show();
+                    break;
+            }
 
 //            Intent intent = new Intent(this, LoginActivity.class);
 //            startActivity(intent);
