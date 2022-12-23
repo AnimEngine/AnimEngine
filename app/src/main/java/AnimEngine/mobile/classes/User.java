@@ -2,9 +2,10 @@ package AnimEngine.mobile.classes;
 
 import android.widget.EditText;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class User {
+public class User implements Serializable {
     private String Email, Password, Type;
     public User(String email, String password, String type){
         this.Email =email;

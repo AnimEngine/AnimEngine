@@ -18,6 +18,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Observable;
@@ -26,9 +27,8 @@ import AnimEngine.mobile.classes.Creator;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.User;
 import AnimEngine.mobile.classes.UserAndToken;
-public class userModel extends Observable {
+public class userModel extends Model{
 
-    private String result = "";
     private String action;
     private final FirebaseFunctions mFunctions;
     private final FirebaseAuth mAuth;
@@ -48,6 +48,8 @@ public class userModel extends Observable {
     }
 
     public void register(User user){
+        this.action = REGISTER;
+
         // Create the arguments to the callable function.
         Gson gson = new Gson();
         String jsonToSend = gson.toJson(user);
@@ -56,16 +58,21 @@ public class userModel extends Observable {
         this.mFunctions
                 .getHttpsCallable("register")
                 .call(jsonToSend).addOnCompleteListener(task -> {
-                    HashMap map = (HashMap) task.getResult().getData();
-                    if(map == null){
-                        result = "ERROR";
-                    }else {
-                        if (map.containsKey("ok")) {
-                            result = "OK";
-                            this.action = REGISTER;
-                        } else {
-                            result = "ERROR:"+map.get("error");
+                    if (task.isSuccessful()) {
+                        HashMap map = (HashMap) task.getResult().getData();
+                        if(map == null){
+                            super.result = "ERROR";
+                        }else {
+                            if (map.containsKey("ok")) {
+                                result = "OK";
+                                this.action = REGISTER;
+                            } else {
+                                result = "ERROR:"+map.get("error");
+                            }
                         }
+                    }
+                    else{
+                        result = "ERROR";
                     }
                     setChanged();
                     notifyObservers();
@@ -73,6 +80,8 @@ public class userModel extends Observable {
     }
 
     public void login(String email, String password){
+        this.action = LOGIN;
+
         Gson gson = new Gson();
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -117,7 +126,7 @@ public class userModel extends Observable {
                                                                     innerFan.setPassword(password);
                                                                 }
                                                                 result = "OK";
-                                                                action = LOGIN;
+
 
                                                                 creator.setUser(innerCreator);
                                                                 fan.setUser(innerFan);
@@ -163,6 +172,8 @@ public class userModel extends Observable {
     }
 
     public void forgot(String email, String password){
+        this.action = FORGOT;
+
         String json = String.format("{\"Email\":\"%s\", \"Password\":\"%s\"}", email, password);
         Log.d("forgot_json", json);
 
@@ -177,7 +188,6 @@ public class userModel extends Observable {
                         else{
                             if (map.containsKey("ok")) {
                                 result = "OK";
-                                this.action = FORGOT;
                                 Log.d("forgot_map", map.toString());
 
                                 //fan.setUser(gson.);
@@ -199,8 +209,8 @@ public class userModel extends Observable {
 
 
     public String getResult() {
-        if(this.result != null)
-            return result;
+        if(super.result != null)
+            return super.result;
         else
             return "";
     }

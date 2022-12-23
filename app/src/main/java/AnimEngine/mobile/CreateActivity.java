@@ -33,13 +33,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.Observable;
+import java.util.Observer;
 
 import AnimEngine.mobile.adapters.CreateRVAdapter;
+import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.classes.Genre;
+import AnimEngine.mobile.classes.UserAndToken;
+import AnimEngine.mobile.models.creatorModel;
 
-public class CreateActivity extends AppCompatActivity implements View.OnClickListener{
+public class CreateActivity extends AppCompatActivity implements View.OnClickListener, Observer {
 
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+
+    creatorModel model;
+    UserAndToken creator;
 
     ImageView animeImage;
     EditText animeName, animeDescription;
@@ -57,6 +66,8 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.button_choose_image).setOnClickListener(this);
         findViewById(R.id.button_submit_create).setOnClickListener(this);
 
+        creator = (UserAndToken) getIntent().getSerializableExtra("creator");
+
         genres = new ArrayList<>();
         loadGenres();
 
@@ -68,7 +79,8 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
         TextInputLayout textInputLayoutNameDescription = findViewById(R.id.text_input_anime_description);
         animeDescription = textInputLayoutNameDescription.getEditText();
 
-
+        model = new creatorModel();
+        model.addObserver(this);
 
         animeImage = findViewById(R.id.image_create);
         recyclerView = findViewById(R.id.recycler_create);
@@ -129,7 +141,7 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
             }
 
             InputStream is;
-            String encodedImage;
+            String encodedImage="";
             try {
                 is = getApplicationContext().getContentResolver().openInputStream(this.animeURI);
 
@@ -143,7 +155,22 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
                 e.printStackTrace();
             }
 
+            Anime anime = new Anime(name, description, encodedImage, map);
 
+            model.update(anime, creator.getToken());
+        }
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        String result = this.model.getResult();
+        if(Objects.equals(result, ""))
+            return;
+
+        if(result.startsWith("OK")){
+            Toast.makeText(getApplicationContext(), "Anime created Successfully!", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
         }
     }
 

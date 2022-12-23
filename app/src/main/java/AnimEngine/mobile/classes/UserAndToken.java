@@ -1,6 +1,8 @@
 package AnimEngine.mobile.classes;
 
-public class UserAndToken {
+import java.io.Serializable;
+
+public class UserAndToken implements Serializable {
 
     private String token;
     private User user;

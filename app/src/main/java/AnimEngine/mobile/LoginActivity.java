@@ -36,8 +36,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     UserAndToken creator;
     UserAndToken fan;
 
-    EditText editTextEmail, editTextPassword;
+    EditText editTextEmail, editTextPassword, editTextCheckMail, editTextCheckPassword;
 
+
+    BottomSheetDialog bsd;
     ProgressBar progressBar;
     Button submit;
     TextView pleaseWait;
@@ -61,6 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         TextInputLayout pi = findViewById(R.id.text_input_password_login);
         editTextPassword = pi.getEditText();
+
 
         progressBar = findViewById(R.id.progress_login);
         submit = findViewById(R.id.button_login);
@@ -89,15 +92,47 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         if(view == findViewById(R.id.text_link_forgot_password)){
-            BottomSheetDialog bsd = new BottomSheetDialog(this);
+            bsd = new BottomSheetDialog(this);
             bsd.setContentView(R.layout.bottom_sheet_forgot_password);
             bsd.show();
+
             Button submit = bsd.findViewById(R.id.button_submit);
+            ProgressBar progressBar = bsd.findViewById(R.id.progress_forgot);
             assert submit != null;
+
+            TextInputLayout mni = bsd.findViewById(R.id.text_input_check_email_forgot);
+            assert mni != null;
+            editTextCheckMail = mni.getEditText();
+
+            TextInputLayout pni = bsd.findViewById(R.id.text_input_check_new_password_forgot);
+            assert pni != null;
+            editTextCheckPassword = pni.getEditText();
+
+            CheckEmail emailChecker = new CheckEmail();
+
+
+
+
+
             submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(getApplicationContext(),"Hello",Toast.LENGTH_SHORT).show();
+                    String email = editTextCheckMail.getText().toString();
+                    String password = editTextCheckPassword.getText().toString();
+
+                    if(!emailChecker.isValidEmail(email)) {
+                        Toast.makeText(getApplicationContext(), "Invalid Email!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(password.length()<6) {
+                        Toast.makeText(getApplicationContext(), "Password has to be at least 6 characters long!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    model.forgot(email, password);
+                    assert progressBar != null;
+                    progressBar.setVisibility(View.VISIBLE);
+
                 }
             });
         }
@@ -133,10 +168,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             switch (this.model.getAction()){
                 case userModel.LOGIN:
                     Toast.makeText(getApplicationContext(), "Logged in Successfully!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, CreateActivity.class);
+                    intent.putExtra("creator",creator);
+                    startActivity(intent);
+                    finish();
                     break;
 
                 case userModel.FORGOT:
                     Toast.makeText(getApplicationContext(), "Password updated Successfully!", Toast.LENGTH_SHORT).show();
+                    bsd.cancel();
                     break;
             }
 
@@ -144,9 +184,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //            startActivity(intent);
 //            finish();
         }else{
-            //stopLoadingAnimation();
 
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+            switch (this.model.getAction()){
+                case userModel.LOGIN:
+                    stopLoadingAnimation();
+                    break;
+
+                case userModel.FORGOT:
+                    bsd.cancel();
+                    break;
+            }
+
+
+
+
         }
     }
 }

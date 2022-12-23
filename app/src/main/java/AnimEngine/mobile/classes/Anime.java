@@ -3,6 +3,7 @@ package AnimEngine.mobile.classes;
 import java.util.HashMap;
 
 public class Anime {
+
     private String name;
     private String description;
     private String imageURL;
@@ -11,6 +12,13 @@ public class Anime {
 
     public Anime(String name){
 
+    }
+
+    public Anime(String name, String description, String imageURL, HashMap<String, Float> genres) {
+        this.name = name;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.genres = genres;
     }
 
     public String getName() {
@@ -43,13 +51,5 @@ public class Anime {
 
     public void setGenres(HashMap<String, Float> genres) {
         this.genres = genres;
-    }
-
-    public String getOwnerUID() {
-        return ownerUID;
-    }
-
-    public void setOwnerUID(String ownerUID) {
-        this.ownerUID = ownerUID;
     }
 }
