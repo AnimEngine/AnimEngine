@@ -30,8 +30,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textSize="12sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -41,7 +41,7 @@
 
         android:layout_height="200dp"
         android:layout_below="@+id/text_title_create"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="29dp"
         android:layout_toRightOf="@id/text_input_anime_name"
         android:adjustViewBounds="true"
@@ -53,16 +53,17 @@
         />
 
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/button_choose_image"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/image_create"
         android:layout_toRightOf="@id/text_input_anime_name"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="15dp"
         android:text="Choose Image"
         />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_anime_description"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:layout_below="@+id/text_input_anime_name"
@@ -75,13 +76,103 @@
             android:layout_width="200dp"
             android:layout_height="match_parent"
             android:textSize="12sp"
-            android:inputType="textEmailAddress" />
+            android:inputType="textMultiLine" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_create"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="250dp"
+        android:layout_below="@id/text_input_anime_description"
+        android:layout_marginTop="10dp"
+        />
+
+    <Button
+        android:id="@+id/button_submit_create"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recycler_create"
+        android:layout_centerHorizontal="true"
+        android:text="CREATE"
+        />
+
 
 
 </RelativeLayout>
+
+<!--<LinearLayout-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_below="@+id/text_input_anime_description"-->
+<!--android:orientation="vertical">-->
+<!--<LinearLayout-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:orientation="horizontal"-->
+<!--    >-->
+<!--    <CheckBox-->
+<!--        android:id="@+id/checkbox_action"-->
+<!--        android:layout_width="130dp"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:text="Action"-->
+<!--        />-->
+
+<!--    <com.google.android.material.slider.Slider-->
+<!--        android:id="@+id/slider_action"-->
+<!--        android:layout_width="270dp"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:stepSize="0.1"-->
+<!--        android:value="0.5"-->
+<!--        android:valueFrom="0.0"-->
+<!--        android:valueTo="1.0"-->
+<!--        />-->
+<!--</LinearLayout>-->
+
+<!--<LinearLayout-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:orientation="horizontal"-->
+<!--    >-->
+<!--    <CheckBox-->
+<!--        android:id="@+id/checkbox_adventure"-->
+<!--        android:layout_width="130dp"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:text="Adventure"-->
+<!--        />-->
+
+<!--    <com.google.android.material.slider.Slider-->
+<!--        android:id="@+id/slider_adventure"-->
+<!--        android:layout_width="270dp"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:stepSize="0.1"-->
+<!--        android:value="0.5"-->
+<!--        android:valueFrom="0.0"-->
+<!--        android:valueTo="1.0"-->
+<!--        />-->
+<!--</LinearLayout>-->
+
+<!--<LinearLayout-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:orientation="horizontal"-->
+<!--    >-->
+<!--    <CheckBox-->
+<!--        android:id="@+id/checkbox_comedy"-->
+<!--        android:layout_width="130dp"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:text="Comedy"-->
+<!--        />-->
+
+<!--    <com.google.android.material.slider.Slider-->
+<!--        android:id="@+id/slider_comedy"-->
+<!--        android:layout_width="270dp"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:stepSize="0.1"-->
+<!--        android:value="0.5"-->
+<!--        android:valueFrom="0.0"-->
+<!--        android:valueTo="1.0"-->
+<!--        />-->
+<!--</LinearLayout>-->
+
+<!--</LinearLayout>-->

@@ -5,11 +5,11 @@ plugins {
 
 android {
     namespace 'AnimEngine.mobile'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "AnimEngine.mobile"
-        minSdk 21
+        minSdk 30
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -45,6 +45,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
 
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
+    implementation 'androidx.activity:activity:1.6.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'

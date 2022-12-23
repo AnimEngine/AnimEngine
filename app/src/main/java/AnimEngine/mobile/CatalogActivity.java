@@ -6,13 +6,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.widget.TextView;
 
 
 import java.util.ArrayList;
 
-import AnimEngine.mobile.Anime;
+import AnimEngine.mobile.adapters.CatalogRVAdapter;
+import AnimEngine.mobile.classes.Anime;
 
 public class CatalogActivity extends AppCompatActivity {
 
@@ -26,9 +26,6 @@ public class CatalogActivity extends AppCompatActivity {
         TextView tv_title = findViewById(R.id.catalog_tv);
         RecyclerView rv = findViewById(R.id.catalog_recycler);
         //BottomNavigationView bottomNavigation = findViewById(R.id.catalog_bottom_navigation);
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
         arrayList = new ArrayList<>();
 
@@ -60,25 +57,9 @@ public class CatalogActivity extends AppCompatActivity {
         arrayList.add(new Anime("Dragon Ball"));
         arrayList.add(new Anime("Dragon Ball"));
 
-        CatalogRVAdapter customManufacturersRVAdapter = new CatalogRVAdapter(CatalogActivity.this, getLayoutInflater(), arrayList);
-        rv.setAdapter(customManufacturersRVAdapter);
+        CatalogRVAdapter customCatalogRVAdapter = new CatalogRVAdapter(CatalogActivity.this, getLayoutInflater(), arrayList);
+        rv.setAdapter(customCatalogRVAdapter);
         rv.setLayoutManager(new GridLayoutManager(CatalogActivity.this,4));
-
-
-        int screenHeight = displayMetrics.heightPixels + getNavigationBarHeight();
-        //rv.setMinimumHeight(screenHeight-tv_title.getHeight());
-    }
-
-    private int getNavigationBarHeight() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int usableHeight = metrics.heightPixels;
-        getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
-        int realHeight = metrics.heightPixels;
-        if (realHeight > usableHeight)
-            return realHeight - usableHeight;
-        else
-            return 0;
     }
 
     public boolean showNavigationBar(Resources resources) {

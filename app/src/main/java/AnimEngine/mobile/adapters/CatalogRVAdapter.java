@@ -1,4 +1,4 @@
-package AnimEngine.mobile;
+package AnimEngine.mobile.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import java.util.ArrayList;
+
+import AnimEngine.mobile.classes.Anime;
+import AnimEngine.mobile.R;
 
 
 //import AnimEngine.mobile.utils.Anime;
