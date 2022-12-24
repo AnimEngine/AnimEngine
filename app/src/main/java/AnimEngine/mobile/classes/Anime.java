@@ -8,17 +8,19 @@ public class Anime {
     private String description;
     private String imageURL;
     private HashMap<String, Float> genres;
+    private String ownerUID;
 
 
     public Anime(String name){
 
     }
 
-    public Anime(String name, String description, String imageURL, HashMap<String, Float> genres) {
+    public Anime(String name, String description, String imageURL, HashMap<String, Float> genres, String ownerUID) {
         this.name = name;
         this.description = description;
         this.imageURL = imageURL;
         this.genres = genres;
+        this.ownerUID = ownerUID;
     }
 
     public String getName() {
@@ -51,5 +53,13 @@ public class Anime {
 
     public void setGenres(HashMap<String, Float> genres) {
         this.genres = genres;
+    }
+
+    public String getOwnerUID() {
+        return ownerUID;
+    }
+
+    public void setOwnerUID(String ownerUID) {
+        this.ownerUID = ownerUID;
     }
 }

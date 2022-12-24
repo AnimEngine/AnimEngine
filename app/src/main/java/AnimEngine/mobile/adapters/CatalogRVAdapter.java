@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -46,8 +49,9 @@ public class CatalogRVAdapter extends RecyclerView.Adapter<CatalogRVAdapter.MyVi
     }
 
     public void onBindViewHolder(@NonNull CatalogRVAdapter.MyViewHolder viewHolder, final int position) {
-        //Picasso.get().load((this.mManufacturers.get(position)).getUrl()).fit().centerInside().into(viewHolder.imageButton);
-
+        Picasso.get().load((this.mAnimes.get(position)).getImageURL()).into(viewHolder.imageButton);
+        //Picasso.get().load((this.mAnimes.get(position)).getImageURL()).into(viewHolder.imageButton);
+        viewHolder.textView.setText(mAnimes.get(position).getName());
         viewHolder.imageButton.setOnClickListener(v -> {
 //                final AlertDialog alertDialog = (new AlertDialog.Builder(mContext)).create();
 //                View view = layoutInflater.inflate(R.layout.dialog_manufacturers, null);
@@ -71,10 +75,12 @@ public class CatalogRVAdapter extends RecyclerView.Adapter<CatalogRVAdapter.MyVi
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         public ImageButton imageButton;
+        public TextView textView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             this.imageButton = itemView.findViewById(R.id.IBcardview_anime);
+            this.textView = itemView.findViewById(R.id.TVcardview_anime);
         }
     }
 

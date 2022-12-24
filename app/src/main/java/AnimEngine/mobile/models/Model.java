@@ -6,9 +6,14 @@ import com.google.firebase.functions.FirebaseFunctions;
 import java.util.Observable;
 
 public class Model extends Observable {
+
+    public Model(){
+
+    }
+
     protected String result = "";
-    protected FirebaseFunctions mFunctions;
-    protected FirebaseAuth mAuth;
+    protected final FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
+    protected final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public String getResult() {
         return result;

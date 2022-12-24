@@ -167,7 +167,7 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
                 e.printStackTrace();
             }
 
-            Anime anime = new Anime(name, description, encodedImage, map);
+            Anime anime = new Anime(name, description, encodedImage, map, "");
 
             model.update(anime, creator.getToken());
         }

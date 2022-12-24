@@ -41,9 +41,6 @@ public class userModel extends Model{
     public static final String NONE = "NONE";
 
     public userModel(UserAndToken creator, UserAndToken fan){
-        super.mFunctions = FirebaseFunctions.getInstance();
-        super.mAuth = FirebaseAuth.getInstance();
-
         this.creator=creator;
         this.fan=fan;
     }

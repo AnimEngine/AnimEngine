@@ -40,10 +40,6 @@ interface StrippedUser{
 }
 public class creatorModel extends Model{
 
-    public creatorModel(){
-        super.mFunctions = FirebaseFunctions.getInstance();
-    }
-
     public void update(Anime anime, String token){
         Gson gson = new Gson();
         AnimeAndToken animeAndToken = new AnimeAndToken();
