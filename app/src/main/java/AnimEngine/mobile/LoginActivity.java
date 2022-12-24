@@ -135,6 +135,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 }
             });
+
+            Intent intent = new Intent(this, EngineActivity.class);
+            startActivity(intent);
         }
 
         if(view == findViewById(R.id.button_login)){
