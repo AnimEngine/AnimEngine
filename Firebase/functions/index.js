@@ -5,7 +5,7 @@ const { auth } = require("firebase-admin/auth");
 const { user } = require("firebase-functions/v1/auth");
 const { error } = require("firebase-functions/logger");
 
-const serviceAccount = require('./animengine-fb858-bbf71017f530.json');
+const serviceAccount = require('./animengine-fb858-firebase-adminsdk-1l8jr-9df9aa102d.json');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://animengine-fb858-default-rtdb.firebaseio.com/",
@@ -23,7 +23,39 @@ const animeRef = db.ref("/Anime");
 
 const storage = admin.storage().bucket();
 
+function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+            return true;
+        }
+    }
 
+    return false;
+}
+
+function determineRef(type){
+    if(type == "fan")
+        return fanRef;
+    else
+        return creatorRef;
+}
+
+const errorCatcher = (error) => {
+    response.json({"data":{"error":`${error}`}});
+    return;
+};
+
+async function getUIDUsingToken(token, response){
+    var uid;
+    await admin.auth().verifyIdToken(token)
+        .then((decodedToken) => {
+            uid = decodedToken.uid;
+        })
+        .catch((error) => {throw error});
+
+    return uid;
+}
 
 exports.register = functions.https.onRequest(async (request, response) => {
     // Grab the request body as JSON and parse it into a JS object.
@@ -37,10 +69,7 @@ exports.register = functions.https.onRequest(async (request, response) => {
     const password = userObj["Password"];
 
     const userType = userObj["Type"];
-    if(userType == "fan")
-        currentRef = fanRef;
-    else
-        currentRef = creatorRef;
+    currentRef = determineRef(userType);
     
 
     delete userObj["Email"];
@@ -63,14 +92,9 @@ exports.register = functions.https.onRequest(async (request, response) => {
             currentRef.child(uid).set(userObj).then((obj) => {
                 response.json({"data":{"ok":`Successfully created new ${userType} user: ${email}`}});
                 return;
-            }).catch((error) => {
-                response.json({"data":{"error":`${error}`}});
-            });
+            }).catch(errorCatcher);
         })
-        .catch((error) => {
-            response.json({"data":{"error":`${error}`}});
-            return;
-        });
+        .catch(errorCatcher);
     }
 });
 
@@ -93,32 +117,24 @@ exports.login = functions.https.onRequest(async (request, response) => {
         }
     }
     */
-    var uid = "";
-    await admin.auth().verifyIdToken(token)
-        .then((decodedToken) => {
-            uid = decodedToken.uid;
-        })
-        .catch((error) => {
-            response.json({"data":{"error":`${error}`}});
-            return;
-        });
+   var uid = await getUIDUsingToken(token).catch(errorCatcher);
+    // var uid;
+    // await admin.auth().verifyIdToken(token)
+    //     .then((decodedToken) => {
+    //         uid = decodedToken.uid;
+    //     })
+    //     .catch(errorCatcher);
     
     var creatorJson;
     var fanJson;
 
     await creatorRef.child(uid).get()
         .then((dataSnapshot) => {creatorJson=dataSnapshot.toJSON()})
-        .catch((error) => {
-            response.json({"data":{"error":`${error}`}});
-            return;
-        });
+        .catch(errorCatcher);
         
     await fanRef.child(uid).get()
         .then((dataSnapshot) => {fanJson=dataSnapshot.toJSON()})
-        .catch((error) => {
-            response.json({"data":{"error":`${error}`}});
-            return;
-        });
+        .catch(errorCatcher);
     
     response.json({"data":{"ok":{"creator":`${JSON.stringify(creatorJson)}`, "fan":`${JSON.stringify(fanJson)}`}}});
     return;
@@ -155,17 +171,11 @@ exports.forgot = functions.https.onRequest(async (request, response) => {
                     response.json({"data":{"ok":"Password updated successfuly"}});
                     return;
                 })
-                .catch((error) => {
-                    response.json({"data":{"error":`${error}`}});
-                    return;
-                });
+                .catch(errorCatcher);
 
             console.log({"email": `${email}`, "password":`${password}`});
         })
-        .catch((error) => {
-            response.json({"data":{"error":`${error}`}});
-            return;
-        });
+        .catch(errorCatcher);
 
 });
 
@@ -180,15 +190,7 @@ exports.upload = functions.https.onRequest(async (request, response) => {
     //create variable which contains the data from the body request
     const token = inputObj["token"];
 
-    var uid = "";
-    await admin.auth().verifyIdToken(token)
-        .then((decodedToken) => {
-            uid = decodedToken.uid;
-        })
-        .catch((error) => {
-            response.json({"data":{"error":`${error}`}});
-            return;
-        });
+    var uid = await getUIDUsingToken(token).catch(errorCatcher);
 
     const animeName = animeObj["name"];
     console.log(animeName);
@@ -213,11 +215,7 @@ exports.upload = functions.https.onRequest(async (request, response) => {
       }).then((obj) => {
         console.log(`obj: ${obj}`);
         
-      }).catch((error) => {
-        console.error('Error uploading image to Firebase:', error);
-        response.json({"data":{"error":`${error}`}});
-        return;
-      });
+      }).catch(errorCatcher);
 
     var uploadedFile = storage.file(`images/${animeName}.jpg`);
     const signedUrl = await uploadedFile.getSignedUrl({action: 'read',expires: new Date().getTime() + (60 * 60 * 1000)});
@@ -236,10 +234,7 @@ exports.upload = functions.https.onRequest(async (request, response) => {
             response.json({"data":{"ok":"Anime uploaded successfully!"}});
             return;
         })
-        .catch((error) => {
-            response.json({"data":{"error":`${error}`}});
-            return;
-        });
+        .catch(errorCatcher);
 
     /*
     {
@@ -292,34 +287,17 @@ exports.editUser = functions.https.onRequest(async (request, response) => {
 
     const user = userObj["User"];
 
-    var uid = "";
-    await admin.auth().verifyIdToken(token)
-        .then((decodedToken) => {
-            uid = decodedToken.uid;
-        })
-        .catch((error) => {
-            response.json({"data":{"error":`${error}`}});
-            return;
-        });
+    var uid = await getUIDUsingToken(token).catch(errorCatcher);
 
     
-    var currentRef;
-    if(type == "fan"){
-        currentRef = fanRef;
-    }
-    else{
-        currentRef = creatorRef;
-    }
+    var currentRef=determineRef(type);
 
     await currentRef.child(uid).set(user)
         .then((completed) => {
             response.json({"data":{"ok":"User updated successfully!"}});
             return;
         })
-        .catch((error) => {
-            response.json({"data":{"error":`${error}`}});
-            return;
-        });
+        .catch(errorCatcher);
 });
 
 exports.editGenres = functions.https.onRequest(async (request, response) => {
@@ -337,34 +315,17 @@ exports.editGenres = functions.https.onRequest(async (request, response) => {
     const genres = user["genres"];
     console.log(genres);
 
-    var uid = "";
-    await admin.auth().verifyIdToken(token)
-        .then((decodedToken) => {
-            uid = decodedToken.uid;
-        })
-        .catch((error) => {
-            response.json({"data":{"error":`${error}`}});
-            return;
-        });
+    var uid = await getUIDUsingToken(token).catch(errorCatcher);
 
     
-    var currentRef;
-    if(type == "fan"){
-        currentRef = fanRef;
-    }
-    else{
-        currentRef = creatorRef;
-    }
+    var currentRef=determineRef(type);
 
     await currentRef.child(uid).child("genres").set(genres)
         .then((completed) => {
             response.json({"data":{"ok":"User genres updated successfully!"}});
             return;
         })
-        .catch((error) => {
-            response.json({"data":{"error":`${error}`}});
-            return;
-        });
+        .catch(errorCatcher);
 });
 
 exports.getAnime = functions.https.onRequest(async (request, response) => {
@@ -402,10 +363,7 @@ exports.getAnime = functions.https.onRequest(async (request, response) => {
         animeRef.child(element).get().then((dataSnapshot) => {
             animeMap.set(element ,dataSnapshot.val())
             console.log("data",dataSnapshot)
-        }).catch((error) => {
-            response.json({"data":{"error":`${error}`}});
-            return;
-        })
+        }).catch(errorCatcher)
         
     });
 
@@ -418,45 +376,83 @@ exports.getAllAnime = functions.https.onRequest(async (request, response) => {
     const objects = [];
     await animeRef.once('value').then((snapshot) => {
         snapshot.forEach((childSnapshot) => {
-            const object = childSnapshot.val();
+            var object = childSnapshot.val();
+            object.name=childSnapshot.key;
+
             objects.push(object);
         });
-    }).catch((error) => {
-        response.json({"data":{"error":`${error}`}});
-        return;
-    });
+    }).catch(errorCatcher);
 
     response.json({"data":{"ok":JSON.stringify(objects)}});
     return;
     
 }); 
 
-// exports.getBestKAnime = functions.https.onRequest(async (request, response) => {
-//     const json = request.body["data"];
-//     userObj = JSON.parse(json);
-//     const user = userObj["User"];
-//     const genres = user["genres"];
+exports.getBestKAnime = functions.https.onRequest(async (request, response) => {
+    const json = request.body["data"];
+    inputObj = JSON.parse(json);
+
+    const token = inputObj["Token"];
+    const type = inputObj["Type"];
+
+    console.log(token);
+
+    var uid = await getUIDUsingToken(token).catch(errorCatcher);
+
+    var currentRef = determineRef(type);
+
+    const userObj = await currentRef.child(uid).get()
+    const blackListedAnimes = userObj["blacklist"];
+    const userGenres = userObj["genres"];
+
+    const objects = [];
+    await animeRef.once('value').then((snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+            var object = childSnapshot.val();
+            object.name=childSnapshot.key;
+            
+            var animeObj = {
+                name: object.name,
+                genres: object.genres
+            };
+            if(!containsObject(object.name, blackListedAnimes))
+                objects.push(animeObj);
+        });
+    }).catch(errorCatcher);
+
+    const calcDistance = (animeObj) => {
+        var sum = 0;
+        userGenres.forEach((key) => {
+            sum += Math.abs(userGenres[key] - animeObj.genres[key])
+        });
+
+        return sum;
+    };
+
+    objects.sort((a, b) => {return calcDistance(a) - calcDistance(b);})
+    const animeNames = objects.map(x => x.name);
+
+    response.json({"data":{"ok":JSON.stringify(animeNames)}});
+    return;
+    // const user = userObj["User"];
+    // const genres = user["genres"];
     
-//     const arrAnime = []
-//     await animeRef.once('value').then((snapshot) => {
-//         snapshot.forEach((childSnapshot) => {
-//             arrAnime.push(childSnapshot.val());
-//         });
-//     });
+    // const arrAnime = []
+    // await animeRef.once('value').then((snapshot) => {
+    //     snapshot.forEach((childSnapshot) => {
+    //         arrAnime.push(childSnapshot.val());
+    //     });
+    // });
 
-//     var countK = 0;
-//     var sumDistances = 0;
-//     const dictValuAnime = {}; 
-//     arrAnime.forEach((animeObj) => {
-//         const anime = animeRef[animeObj];
-//         sumDistances+= abs(anime[] - genres[]) ;
+    // var countK = 0;
+    // var sumDistances = 0;
+    // const dictValuAnime = {}; 
+    // arrAnime.forEach((animeObj) => {
+    //     const anime = animeRef[animeObj];
+    //     sumDistances+= abs(anime[] - genres[]) ;
 
-//     });
-
-
-    
-// });
+    // });
+});
   
-
 
 
