@@ -16,7 +16,10 @@ import android.view.View;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.ArrayList;
+
 import AnimEngine.mobile.adapters.SectionsPagerAdapter;
+import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.classes.UserAndToken;
 
 public class EngineActivity extends AppCompatActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener {
@@ -24,7 +27,7 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
     UserAndToken fan;
 
     BottomNavigationView bottomNavigationView;
-
+    ArrayList<Anime> animeArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,8 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         bottomNavigationView.setSelectedItemId(R.id.home_page);
 
         bottomNavigationView.setOnItemSelectedListener(this);
+
+        animeArrayList = new ArrayList<>();
 
         fan = (UserAndToken) getIntent().getSerializableExtra("fan");
 

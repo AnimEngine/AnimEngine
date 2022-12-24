@@ -72,6 +72,11 @@ public class dbAndStorageModel extends Model{
                 });
     }
 
+    public void getBestKAnime(){
+
+    }
+
+
 
     public List getAnimeList() {
         return animeList;
