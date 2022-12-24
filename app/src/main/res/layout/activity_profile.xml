@@ -8,7 +8,7 @@
     tools:context=".ProfileActivity">
 
     <EditText
-        android:id="@+id/text_title_profile_client"
+        android:id="@+id/text_title_profile_creator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Profile"
@@ -17,114 +17,129 @@
         android:inputType="none"
         />
 
-    <LinearLayout
-        android:id="@+id/text_line_first_name_client"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_title_profile_client"
-        android:layout_marginLeft="10dp"
-        >
-
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="First Name"
-            android:inputType="none"
-            />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:hint="First Name"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:inputType="textEmailAddress" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/text_line_last_name_client"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_line_first_name_client"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        >
-
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Last Name"
-            android:inputType="none"
-            />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:hint="Last Name"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:inputType="textEmailAddress" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/text_line_email_client"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_line_last_name_client"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        >
-
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Email         "
-            android:inputType="none"
-            />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:hint="Email"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:inputType="textEmailAddress" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_profile_creator"
+        android:layout_width="match_parent"
+        android:layout_height="570dp"
+        android:layout_below="@id/text_title_profile_creator"
+        android:layout_marginTop="10dp"
+        />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="670dp"
-        app:menu="@menu/bottom_navigation_menu_client_app" />
+        app:menu="@menu/bottom_navigation_menu_creator" />
 
 </RelativeLayout>
+
+<!--<LinearLayout-->
+<!--android:id="@+id/text_line_first_name_client"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_below="@+id/text_title_profile_client"-->
+<!--android:layout_marginLeft="10dp"-->
+<!--    >-->
+
+
+<!--<EditText-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:text="First Name"-->
+<!--    android:inputType="none"-->
+<!--    />-->
+<!--<TextView-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:layout_marginLeft="10dp"-->
+<!--    android:hint="First Name"-->
+<!--    style="@style/TextAppearance.AppCompat.Headline"-->
+<!--    />-->
+
+<!--<com.google.android.material.textfield.TextInputLayout-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:layout_marginLeft="10dp"-->
+<!--    android:hint="First Name"-->
+<!--    android:visibility="gone"-->
+<!--    >-->
+
+<!--    <com.google.android.material.textfield.TextInputEditText-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textSize="12sp"-->
+<!--        android:inputType="textEmailAddress" />-->
+
+<!--</com.google.android.material.textfield.TextInputLayout>-->
+
+<!--</LinearLayout>-->
+<!--<LinearLayout-->
+<!--android:id="@+id/text_line_last_name_client"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_below="@+id/text_line_first_name_client"-->
+<!--android:layout_marginLeft="10dp"-->
+<!--android:layout_marginTop="5dp"-->
+<!--    >-->
+
+
+<!--<EditText-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:text="Last Name"-->
+<!--    android:inputType="none"-->
+<!--    />-->
+
+<!--<com.google.android.material.textfield.TextInputLayout-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:layout_marginLeft="10dp"-->
+<!--    android:hint="Last Name"-->
+<!--    >-->
+
+<!--    <com.google.android.material.textfield.TextInputEditText-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textSize="12sp"-->
+<!--        android:inputType="textEmailAddress" />-->
+
+<!--</com.google.android.material.textfield.TextInputLayout>-->
+
+<!--</LinearLayout>-->
+<!--<LinearLayout-->
+<!--android:id="@+id/text_line_email_client"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_below="@+id/text_line_last_name_client"-->
+<!--android:layout_marginLeft="10dp"-->
+<!--android:layout_marginTop="5dp"-->
+<!--    >-->
+
+
+<!--<EditText-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:text="Email         "-->
+<!--    android:inputType="none"-->
+<!--    />-->
+
+<!--<com.google.android.material.textfield.TextInputLayout-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:layout_marginLeft="10dp"-->
+<!--    android:hint="Email"-->
+<!--    >-->
+
+<!--    <com.google.android.material.textfield.TextInputEditText-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textSize="12sp"-->
+<!--        android:inputType="textEmailAddress" />-->
+
+<!--</com.google.android.material.textfield.TextInputLayout>-->
+
+<!--</LinearLayout>-->
 
 
 

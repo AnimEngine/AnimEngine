@@ -3,23 +3,28 @@ package AnimEngine.mobile;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -43,7 +48,7 @@ import AnimEngine.mobile.classes.Genre;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.creatorModel;
 
-public class CreateActivity extends AppCompatActivity implements View.OnClickListener, Observer {
+public class CreateActivity extends AppCompatActivity implements View.OnClickListener, Observer, NavigationBarView.OnItemSelectedListener {
 
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
@@ -58,6 +63,8 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
     ArrayList<Genre> genres;
     ArrayList<Pair<CheckBox, Slider>> checkBox_Slider_pairs;
 
+    BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +72,11 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
 
         findViewById(R.id.button_choose_image).setOnClickListener(this);
         findViewById(R.id.button_submit_create).setOnClickListener(this);
+
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(this);
+        bottomNavigationView.setSelectedItemId(R.id.item_add_creator);
 
         creator = (UserAndToken) getIntent().getSerializableExtra("creator");
 
@@ -201,5 +213,38 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.item_profile_creator:
+
+                intent = new Intent(this, ProfileActivity.class);
+                intent.putExtra("creator", creator);
+                startActivity(intent);
+                finish();
+
+                return true;
+
+            case R.id.item_catalog_creator:
+                intent = new Intent(this, CatalogActivity.class);
+                intent.putExtra("creator", creator);
+                startActivity(intent);
+                finish();
+
+                return true;
+
+            case R.id.item_home_creator:
+                intent = new Intent(this, CreateActivity.class);
+                intent.putExtra("creator", creator);
+                startActivity(intent);
+                finish();
+
+                return true;
+
+        }
+        return false;
     }
 }

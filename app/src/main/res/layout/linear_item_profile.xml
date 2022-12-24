@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/text_title_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="First Name:"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/red"
+        style="@style/Widget.AppCompat.EditText"
+        />
+
+    <TextView
+        android:id="@+id/text_item_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/text_title_profile"
+        android:gravity="center_vertical"
+        android:text="Dani"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/red"
+        style="@style/TextAppearance.AppCompat.Large"
+        />
+
+    <EditText
+        android:id="@+id/edit_text_item_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/text_title_profile"
+        android:text="First Name:"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/red"
+        style="@style/Widget.AppCompat.EditText"
+        android:visibility="gone"
+        />
+
+    <ImageButton
+        android:id="@+id/image_button_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="clip_horizontal"
+        android:layout_alignParentEnd="true"
+        android:background="@color/transparent"
+        android:src="@drawable/icon_edit"
+        android:visibility="visible"
+        />
+
+    <ImageButton
+        android:id="@+id/image_button_check"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="clip_horizontal"
+        android:layout_alignParentEnd="true"
+        android:background="@color/transparent"
+        android:src="@drawable/icon_check_encircled"
+        app:tint="@color/green"
+        android:visibility="gone"
+        />
+
+    <ImageButton
+        android:id="@+id/image_button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="clip_horizontal"
+        android:layout_toLeftOf="@+id/image_button_check"
+        android:background="@color/transparent"
+        android:src="@drawable/icon_cancel"
+        app:tint="@color/red"
+        android:visibility="gone"
+        />
+</RelativeLayout>
