@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EngineActivity"
+    >
+    <ImageView
+        android:id="@+id/image_anime_engine"
+        android:layout_width="500dp"
+        android:layout_height="800dp"
+        android:layout_marginTop="15dp"
+        app:srcCompat="@drawable/erased"
+        />
+    <LinearLayout
+        android:id="@+id/text_view_titles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="460dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/text_view_anime_name_engine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            android:text="Anime Name"
+            android:textSize="30dp"/>
+
+        <TextView
+            android:id="@+id/text_view_anime_creator_engine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:text="Creator"
+            android:textSize="30dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/button_cluster_button_engine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/text_view_titles"
+        android:layout_centerHorizontal="true"
+        >
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/button_watch_later_anime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_another_anime"
+            app:backgroundTint="#FF0000"
+            app:fabSize="normal"
+            app:layout_anchorGravity="bottom|end" />
+
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/button_show_information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_more_information"
+            app:backgroundTint="#FF0000"
+            android:layout_marginLeft="50dp"
+            app:fabSize="normal"
+            app:layout_anchorGravity="bottom|end" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/button_add_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icone_add_comment"
+            app:backgroundTint="#FF0000"
+            android:layout_marginLeft="50dp"
+            app:fabSize="normal"
+            app:layout_anchorGravity="bottom|end" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/button_pass_anime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_watch_later"
+            app:backgroundTint="#FF0000"
+            android:layout_marginLeft="50dp"
+            app:fabSize="normal"
+            app:layout_anchorGravity="bottom|end" />
+
+    </LinearLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/button_cluster_button_engine"
+        app:menu="@menu/bottom_navigation_menu_client" />
+
+
+
+</RelativeLayout>
