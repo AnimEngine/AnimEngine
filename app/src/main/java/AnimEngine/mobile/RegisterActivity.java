@@ -16,6 +16,12 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -159,14 +165,48 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
 
             User user;
+            HashMap<String, String> genres = new HashMap<>();
             if(isCreator)
                 user = new Creator(email, password, "creator", studioName, website);
             else
-                user = new Fan(email, password, "fan", fName, lName);
+                user = new Fan(email, password, "fan", fName, lName, new String[0], createGenresHashMap());
 
             this.model.register(user);
 
             startLoadingAnimation();
+        }
+    }
+
+    private HashMap<String, Float> createGenresHashMap(){
+        HashMap<String, Float> ret = new HashMap<>();
+        String genresJson="";
+        try {
+            InputStream is = getApplicationContext().getAssets().open("genres.json");
+
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+
+            genresJson = new String(buffer, "UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        JSONObject obj = null;
+        try {
+            obj = new JSONObject(genresJson);
+
+            JSONArray genres = obj.getJSONArray("genres");
+
+            for (int i = 0; i < genres.length(); i++) {
+                String genre = (String) genres.get(i);
+                ret.put(genre, 0.0f);
+            }
+
+            return ret;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
