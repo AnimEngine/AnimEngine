@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -19,14 +21,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        findViewById(R.id.item_profile_client).setOnClickListener(this);
+        setContentView(R.layout.activity_profile);
 
+        findViewById(R.id.icon_edit_button).setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View view) {
-        if(view == findViewById(R.id.item_profile_client)) {
+        if(view == findViewById(R.id.icon_edit_button)){
 
         }
     }
