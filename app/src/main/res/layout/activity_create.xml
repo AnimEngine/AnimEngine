@@ -86,6 +86,7 @@
         android:layout_height="250dp"
         android:layout_below="@id/text_input_anime_description"
         android:layout_marginTop="10dp"
+
         />
 
     <Button
@@ -95,6 +96,7 @@
         android:layout_below="@id/recycler_create"
         android:layout_centerHorizontal="true"
         android:text="CREATE"
+
         />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

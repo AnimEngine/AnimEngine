@@ -8,6 +8,7 @@ import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
@@ -59,6 +61,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         commit.setOnClickListener(this);
         cancel.setOnClickListener(this);
 
+
+        BottomNavigationView bottomNavigationViewCreator = findViewById(R.id.bottom_navigation_creator);
+        bottomNavigationViewCreator.setSelectedItemId(R.id.item_profile_creator);
+        bottomNavigationViewCreator.setOnItemSelectedListener(this);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.profile_page);
+        bottomNavigationView.setOnItemSelectedListener(this);
+
+        findViewById(R.id.button_logout_account).setOnClickListener(this);
+
+
         keyValuePairs = new ArrayList<>();
 
         model = new creatorModel();
@@ -68,15 +82,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         if (creator != null) {
             isCreator = true;
             creatorObj = (Creator) creator.getUser();
-
             keyValuePairs.add(new Pair<>("Email: ", creator.getUser().getEmail()));
             keyValuePairs.add(new Pair<>("Password: ", creator.getUser().getPassword()));
 
             keyValuePairs.add(new Pair<>("Studio Name: ", creatorObj.getStudioName()));
             keyValuePairs.add(new Pair<>("Website: ", creatorObj.getWebAddress()));
+
+            bottomNavigationViewCreator.setVisibility(View.VISIBLE);
         }
         else {
-            fan = (UserAndToken) getIntent().getSerializableExtra("fan");
+            fan = (UserAndToken) getIntent().getSerializableExtra( "fan");
             isCreator = false;
             fanObj = (Fan) fan.getUser();
 
@@ -85,6 +100,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             keyValuePairs.add(new Pair<>("First Name: ", fanObj.getFName()));
             keyValuePairs.add(new Pair<>("Last Name: ", fanObj.getLName()));
+
+            bottomNavigationView.setVisibility(View.VISIBLE);
         }
 
 
@@ -122,16 +139,67 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         if(view == findViewById(R.id.button_cancel)) {
             hideActionButtons();
         }
+
+        if(view == findViewById(R.id.button_logout_account)){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        switch (item){
-//
-//        }
+        if(isCreator){
+            Intent intent;
+            switch (item.getItemId()) {
 
-        return false;
+                case R.id.item_catalog_creator:
+                    intent = new Intent(this, CatalogActivity.class);
+                    intent.putExtra("creator", creator);
+                    startActivity(intent);
+                    finish();
+
+                    return true;
+
+                case R.id.item_add_creator:
+                    intent = new Intent(this, CreateActivity.class);
+                    intent.putExtra("creator", creator);
+                    startActivity(intent);
+                    finish();
+
+                    return true;
+
+            }
+            return false;
+        }
+        else{
+            Intent intent;
+            switch (item.getItemId()) {
+
+                case R.id.catalog_page:
+                    intent = new Intent(this, CatalogActivity.class);
+                    intent.putExtra("fan", fan);
+                    startActivity(intent);
+                    finish();
+
+                    return true;
+
+                case R.id.home_page:
+                    intent = new Intent(this, EngineActivity.class);
+                    intent.putExtra("fan", fan);
+                    startActivity(intent);
+                    finish();
+
+                    return true;
+
+            }
+            return false;
+        }
+
+
     }
+
+
 
     @Override
     public void update(Observable o, Object arg) {
@@ -160,4 +228,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             adapter.rollback();
         adapter.setEdited(false);
     }
+
+
 }

@@ -94,14 +94,6 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
             return true;
         }
 
-        if (R.id.home_page == curr) {
-            intent = new Intent(this, EngineActivity.class);
-            intent.putExtra("fan", fan);
-            startActivity(intent);
-            finish();
-
-            return true;
-        }
 
         return false;
     }

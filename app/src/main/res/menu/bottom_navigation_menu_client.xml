@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/profile_page"
+        android:enabled="true"
+        android:icon="@drawable/icon_profile_page"
+        android:title="@string/profile_page_title"/>
+
+    <item
         android:id="@+id/catalog_page"
         android:enabled="true"
         android:icon="@drawable/ic_catalog_page"
         android:title="@string/catalog_page_title"/>
+
     <item
         android:id="@+id/home_page"
         android:enabled="true"
         android:icon="@drawable/ic_home_page"
         android:title="@string/home_page_title"/>
 
-    <item
-        android:id="@+id/profile_page"
-        android:enabled="true"
-        android:icon="@drawable/icon_profile_page"
-        android:title="@string/profile_page_title"/>
+
 </menu>

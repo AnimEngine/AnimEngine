@@ -25,10 +25,21 @@
         />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/catalog_bottom_navigation"
+        android:id="@+id/bottom_navigation_creator_catalog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/bottom_navigation_menu_client" />
+        app:menu="@menu/bottom_navigation_menu_creator"
+        android:visibility="gone"
+        />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_catalog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_navigation_menu_client"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>

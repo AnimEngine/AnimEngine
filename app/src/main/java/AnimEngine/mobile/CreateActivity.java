@@ -75,8 +75,9 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
 
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.item_add_creator);
+        bottomNavigationView.setOnItemSelectedListener(this);
+
 
         creator = (UserAndToken) getIntent().getSerializableExtra("creator");
 
@@ -171,6 +172,7 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
 
             model.update(anime, creator.getToken());
         }
+
     }
 
     @Override
@@ -220,7 +222,7 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
         Intent intent;
         switch (item.getItemId()) {
             case R.id.item_profile_creator:
-
+                Log.d("ok", "in item_profile_creator");
                 intent = new Intent(this, ProfileActivity.class);
                 intent.putExtra("creator", creator);
                 startActivity(intent);
@@ -229,6 +231,8 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
                 return true;
 
             case R.id.item_catalog_creator:
+                Log.d("ok", "in item_catalog_creator");
+
                 intent = new Intent(this, CatalogActivity.class);
                 intent.putExtra("creator", creator);
                 startActivity(intent);
@@ -236,13 +240,6 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
 
                 return true;
 
-            case R.id.item_home_creator:
-                intent = new Intent(this, CreateActivity.class);
-                intent.putExtra("creator", creator);
-                startActivity(intent);
-                finish();
-
-                return true;
 
         }
         return false;
