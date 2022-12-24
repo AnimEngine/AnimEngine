@@ -13,10 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -97,6 +99,23 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         if(view == findViewById(R.id.button_commit)) {
+            String email = adapter.getmFields().get(0).second;
+            String password = adapter.getmFields().get(1).second;
+
+
+
+
+                String field1 = adapter.getmFields().get(2).second;
+                String field2 = adapter.getmFields().get(3).second;
+            if(isCreator) {
+                Creator newCreator = new Creator(email, password, "creator", field1, field2);
+                model.editUser(creator.getToken(), "creator", newCreator);
+            }else{
+                Fan newFan = new Fan(email, password, "fan", field1, field2);
+                model.editUser(fan.getToken(), "fan", newFan);
+            }
+
+
 
         }
 
@@ -116,7 +135,19 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void update(Observable o, Object arg) {
+        String result = this.model.getResult();
 
+        if(Objects.equals(result, ""))
+            return;
+
+        if(result.startsWith("OK")){
+            Toast.makeText(getApplicationContext(), "User updated Successfully!", Toast.LENGTH_SHORT).show();
+            adapter.setEdited(false);
+            hideActionButtons();
+
+        }else {
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void showActionButtons(){

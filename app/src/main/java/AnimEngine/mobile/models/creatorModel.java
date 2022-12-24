@@ -37,7 +37,6 @@ class StrippedCreator implements StrippedUser{
 }
 
 interface StrippedUser{
-
 }
 public class creatorModel extends Model{
 
@@ -101,5 +100,27 @@ public class creatorModel extends Model{
         Gson gson = new Gson();
         String json = gson.toJson(obj, UserAndTokenAndType.class);
         Log.e("edit_json", json);
+
+        this.mFunctions
+                .getHttpsCallable("editUser")
+                .call(json).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        HashMap map = (HashMap) task.getResult().getData();
+                        if (map == null) {
+                            result = "ERROR";
+                        } else {
+                            if (map.containsKey("ok")) {
+                                result = "OK";
+                            } else {
+                                result = "ERROR:" + map.get("error");
+                            }
+                        }
+                    }
+                    else{
+                        result = "ERROR";
+                    }
+                    setChanged();
+                    notifyObservers();
+                });
     }
 }
