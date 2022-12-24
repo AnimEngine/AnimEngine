@@ -14,28 +14,38 @@ import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.data.DataBufferObserver;
 import com.google.android.material.slider.Slider;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Observable;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import AnimEngine.mobile.R;
 import AnimEngine.mobile.classes.Genre;
 
-public class ProfileRVAdapter extends RecyclerView.Adapter<ProfileRVAdapter.MyViewHolder> {
+public class ProfileRVAdapter extends RecyclerView.Adapter<ProfileRVAdapter.MyViewHolder>{
     //logic
     Context mContext;
     LayoutInflater layoutInflater;
     ArrayList<Pair<String, String>> mFields;
 
-    boolean isEdited;
+    ArrayList<Pair<String, String>> rollback;
+    ArrayList<TextView> textViews;
 
-    public ProfileRVAdapter(Context mContext, LayoutInflater layoutInflater, ArrayList<Pair<String, String>> mFields) {
+    boolean isEdited;
+    Runnable function;
+
+    public ProfileRVAdapter(Context mContext, LayoutInflater layoutInflater, ArrayList<Pair<String, String>> mFields, Runnable function) {
         this.mContext = mContext;
         this.layoutInflater = layoutInflater;
         this.mFields = mFields;
 
         this.isEdited = false;
+        this.function = function;
+        textViews = new ArrayList<>();
     }
 
     @Override
@@ -59,12 +69,14 @@ public class ProfileRVAdapter extends RecyclerView.Adapter<ProfileRVAdapter.MyVi
         textItemTitle.setText(mFields.get(position).first);
 
         TextView textItem = viewHolder.textItem;
+        textViews.add(textItem);
         textItem.setVisibility(View.VISIBLE);
 
         textItem.setText(mFields.get(position).second);
 
         EditText editTextItem = viewHolder.editTextItem;
-        editTextItem.setText(String.format("Please enter new %s",textItemTitle.getText()));
+        editTextItem.setText("");
+        editTextItem.setHint(String.format("Enter new %s",textItemTitle.getText()));
         editTextItem.setVisibility(View.GONE);
 
         ImageButton edit = viewHolder.edit;
@@ -79,7 +91,13 @@ public class ProfileRVAdapter extends RecyclerView.Adapter<ProfileRVAdapter.MyVi
             cancel.setVisibility(View.GONE);
 
             edit.setOnClickListener(v -> {
+                if(!isEdited) {
+                    rollback = new ArrayList<>(mFields);
+                    isEdited = true;
+                    function.run();
+                }
                 editMode(textItem, editTextItem, edit, check, cancel);
+                editTextItem.setText("");
             });
 
             check.setOnClickListener(v -> {
@@ -87,7 +105,10 @@ public class ProfileRVAdapter extends RecyclerView.Adapter<ProfileRVAdapter.MyVi
 
                 mFields.set(position, new Pair<>(mFields.get(position).first, String.valueOf(editTextItem.getText())));
                 textItem.setText(String.valueOf(editTextItem.getText()));
-                isEdited = true;
+//                if(!isEdited) {
+//                    isEdited = true;
+//                    function.run();
+//                }
             });
 
             cancel.setOnClickListener(v -> {
@@ -96,7 +117,7 @@ public class ProfileRVAdapter extends RecyclerView.Adapter<ProfileRVAdapter.MyVi
         }
     }
 
-    private static void editMode(TextView textItem, EditText editTextItem, ImageButton edit, ImageButton check, ImageButton cancel){
+    private void editMode(TextView textItem, EditText editTextItem, ImageButton edit, ImageButton check, ImageButton cancel){
         edit.setVisibility(View.GONE);
 
         check.setVisibility(View.VISIBLE);
@@ -105,7 +126,7 @@ public class ProfileRVAdapter extends RecyclerView.Adapter<ProfileRVAdapter.MyVi
         editTextItem.setVisibility(View.VISIBLE);
         textItem.setVisibility(View.GONE);
     }
-    private static void readMode(TextView textItem, EditText editTextItem, ImageButton edit, ImageButton check, ImageButton cancel){
+    private void readMode(TextView textItem, EditText editTextItem, ImageButton edit, ImageButton check, ImageButton cancel){
         edit.setVisibility(View.VISIBLE);
 
         check.setVisibility(View.GONE);
@@ -113,6 +134,12 @@ public class ProfileRVAdapter extends RecyclerView.Adapter<ProfileRVAdapter.MyVi
 
         editTextItem.setVisibility(View.GONE);
         textItem.setVisibility(View.VISIBLE);
+    }
+    public void rollback(){
+        mFields=new ArrayList<>(rollback);
+        for (int i = 0; i < mFields.size(); i++) {
+            textViews.get(i).setText(mFields.get(i).second);
+        }
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -132,5 +159,17 @@ public class ProfileRVAdapter extends RecyclerView.Adapter<ProfileRVAdapter.MyVi
             this.check = itemView.findViewById(R.id.image_button_check);
             this.cancel = itemView.findViewById(R.id.image_button_cancel);
         }
+    }
+
+    public ArrayList<Pair<String, String>> getmFields() {
+        return mFields;
+    }
+
+    public boolean isEdited() {
+        return isEdited;
+    }
+
+    public void setEdited(boolean edited) {
+        isEdited = edited;
     }
 }

@@ -8,7 +8,7 @@
     tools:context=".ProfileActivity">
 
     <EditText
-        android:id="@+id/text_title_profile_creator"
+        android:id="@+id/text_title_profile_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Profile"
@@ -18,18 +18,41 @@
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_profile_creator"
+        android:id="@+id/recycler_profile"
         android:layout_width="match_parent"
-        android:layout_height="570dp"
-        android:layout_below="@id/text_title_profile_creator"
+        android:layout_height="530dp"
+        android:layout_below="@id/text_title_profile_header"
         android:layout_marginTop="10dp"
         />
 
+    <LinearLayout
+        android:id="@+id/button_cancel_commit_pair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_navigation"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+    <Button
+        android:id="@+id/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="50dp"
+        android:text="CANCEL"
+        />
+
+    <Button
+        android:id="@+id/button_commit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/green"
+        android:text="COMMIT"
+        />
+    </LinearLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="670dp"
+        android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation_menu_creator" />
 
 </RelativeLayout>

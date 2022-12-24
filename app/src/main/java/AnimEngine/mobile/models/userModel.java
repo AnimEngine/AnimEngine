@@ -29,19 +29,20 @@ import AnimEngine.mobile.classes.User;
 import AnimEngine.mobile.classes.UserAndToken;
 public class userModel extends Model{
 
-    private String action;
-    private final FirebaseFunctions mFunctions;
-    private final FirebaseAuth mAuth;
+    private String action = NONE;
 
-    private UserAndToken creator, fan;
+    private final UserAndToken creator;
+    private final UserAndToken fan;
 
     public static final String REGISTER = "REGISTER";
     public static final String LOGIN = "LOGIN";
     public static final String FORGOT = "FORGOT";
 
+    public static final String NONE = "NONE";
+
     public userModel(UserAndToken creator, UserAndToken fan){
-        this.mFunctions = FirebaseFunctions.getInstance();
-        this.mAuth = FirebaseAuth.getInstance();
+        super.mFunctions = FirebaseFunctions.getInstance();
+        super.mAuth = FirebaseAuth.getInstance();
 
         this.creator=creator;
         this.fan=fan;
@@ -54,18 +55,17 @@ public class userModel extends Model{
         Gson gson = new Gson();
         String jsonToSend = gson.toJson(user);
 
-        Log.d("testingos_register", jsonToSend);
+        Log.d("register_json", jsonToSend);
         this.mFunctions
                 .getHttpsCallable("register")
                 .call(jsonToSend).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         HashMap map = (HashMap) task.getResult().getData();
                         if(map == null){
-                            super.result = "ERROR";
+                            result = "ERROR";
                         }else {
                             if (map.containsKey("ok")) {
                                 result = "OK";
-                                this.action = REGISTER;
                             } else {
                                 result = "ERROR:"+map.get("error");
                             }
@@ -84,89 +84,93 @@ public class userModel extends Model{
 
         Gson gson = new Gson();
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = task.getResult().getUser();
-                            assert user != null;
-                            user.getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<GetTokenResult> task) {
-                                    if (task.isSuccessful()) {
-                                        String token = task.getResult().getToken();
-                                        creator.setToken(token);
-                                        fan.setToken(token);
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        FirebaseUser user = task.getResult().getUser();
+                        assert user != null;
+                        user.getIdToken(true).addOnCompleteListener(getTokenTask -> {
+                            if (getTokenTask.isSuccessful()) {
+                                String token = getTokenTask.getResult().getToken();
+                                creator.setToken(token);
+                                fan.setToken(token);
 
-                                        String json = String.format("{\"Token\":\"%s\"}", token);
+                                String json = String.format("{\"Token\":\"%s\"}", token);
 
-                                        Log.d("login_json", json);
+                                Log.d("login_json", json);
 
-                                        mFunctions
-                                                .getHttpsCallable("login")
-                                                .call(json).addOnCompleteListener(functionTask -> {
-                                                    if (functionTask.isSuccessful()) {
-                                                        HashMap map = (HashMap) functionTask.getResult().getData();
-                                                        if(map == null){
-                                                            result = "ERROR";
-                                                        }else {
-                                                            if (map.containsKey("ok")) {
-                                                                Creator innerCreator = null;
-                                                                Fan innerFan = null;
-                                                                if (!Objects.equals((String) ((HashMap) map.get("ok")).get("creator"), "null")){
-                                                                    innerCreator = gson.fromJson((String) ((HashMap) map.get("ok")).get("creator"), Creator.class);
-                                                                    innerCreator.setEmail(email);
-                                                                    innerCreator.setPassword(password);
-                                                                }
-
-                                                                if (!Objects.equals((String) ((HashMap) map.get("ok")).get("fan"), "null")){
-                                                                    innerFan = gson.fromJson((String) ((HashMap) map.get("ok")).get("fan"), Fan.class);
-                                                                    innerFan.setEmail(email);
-                                                                    innerFan.setPassword(password);
-                                                                }
-                                                                result = "OK";
-
-
-                                                                creator.setUser(innerCreator);
-                                                                fan.setUser(innerFan);
-
-                                                                Log.d("login_map", map.toString());
-                                                                Log.d("login_creator", creator.toString());
-                                                                Log.d("login_fan", fan.toString());
-
-                                                            } else {
-                                                                result = "ERROR:"+map.get("error")+"(CLOUD_FUNCTION_RETURN)";
-                                                            }
+                                mFunctions
+                                        .getHttpsCallable("login")
+                                        .call(json).addOnCompleteListener(functionTask -> {
+                                            if (functionTask.isSuccessful()) {
+                                                HashMap map = (HashMap) functionTask.getResult().getData();
+                                                if(map == null){
+                                                    result = "ERROR";
+                                                }else {
+                                                    if (map.containsKey("ok")) {
+                                                        Creator innerCreator = null;
+                                                        Fan innerFan = null;
+                                                        if (!Objects.equals((String) ((HashMap) map.get("ok")).get("creator"), "null")){
+                                                            innerCreator = gson.fromJson((String) ((HashMap) map.get("ok")).get("creator"), Creator.class);
+                                                            innerCreator.setEmail(email);
+                                                            innerCreator.setPassword(password);
                                                         }
+
+                                                        if (!Objects.equals((String) ((HashMap) map.get("ok")).get("fan"), "null")){
+                                                            innerFan = gson.fromJson((String) ((HashMap) map.get("ok")).get("fan"), Fan.class);
+                                                            innerFan.setEmail(email);
+                                                            innerFan.setPassword(password);
+                                                        }
+                                                        result = "OK";
+
+
+                                                        creator.setUser(innerCreator);
+                                                        fan.setUser(innerFan);
+
+                                                        Log.d("login_map", map.toString());
+                                                        Log.d("login_creator", creator.toString());
+                                                        Log.d("login_fan", fan.toString());
+
+                                                    } else {
+                                                        result = "ERROR:"+map.get("error")+"(CLOUD_FUNCTION_RETURN)";
+
+                                                        creator.setUser(null);
+                                                        fan.setUser(null);
                                                     }
-                                                    else{
-                                                        Log.w("testingos_firebase", functionTask.getException());
-                                                        result = "ERROR:Login Failed!(CLOUD_FUNCTION_CALL)";
-                                                    }
-                                                    setChanged();
-                                                    notifyObservers();
-                                                });
+                                                }
+                                            }
+                                            else{
+                                                Log.w("login_firebase_exception", functionTask.getException());
+                                                result = "ERROR:Login Failed!(CLOUD_FUNCTION_CALL)";
 
-                                        Log.d("firebaseAuthToken: ", token);
-                                    }else
-                                        result="ERROR: Login failed!(GET_TOKEN)";
+                                                creator.setUser(null);
+                                                fan.setUser(null);
+                                            }
+                                            setChanged();
+                                            notifyObservers();
+                                        });
 
-                                    setChanged();
-                                    notifyObservers();
-                                }
-                            });
+                                Log.d("firebaseAuthToken: ", token);
+                            }else {
+                                result = "ERROR: Login failed!(GET_TOKEN)";
 
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            result="ERROR: Login failed!(Incorrect Password)";
+                                creator.setUser(null);
+                                fan.setUser(null);
 
-                            creator.setUser(null);
-                            fan.setUser(null);
+                                setChanged();
+                                notifyObservers();
+                            }
+                        });
 
-                            setChanged();
-                            notifyObservers();
-                        }
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        result="ERROR: Login failed!(Incorrect Password)";
+
+                        creator.setUser(null);
+                        fan.setUser(null);
+
+                        setChanged();
+                        notifyObservers();
                     }
                 });
     }
@@ -217,5 +221,13 @@ public class userModel extends Model{
 
     public String getAction() {
         return action;
+    }
+
+    public UserAndToken getCreator() {
+        return creator;
+    }
+
+    public UserAndToken getFan() {
+        return fan;
     }
 }

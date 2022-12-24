@@ -8,16 +8,41 @@ import com.google.firebase.functions.FirebaseFunctions;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import AnimEngine.mobile.classes.Anime;
+import AnimEngine.mobile.classes.Creator;
+import AnimEngine.mobile.classes.Fan;
+import AnimEngine.mobile.classes.User;
+
 class AnimeAndToken{
     String token;
     Anime anime;
 }
+
+class UserAndTokenAndType{
+    String Token;
+    String Type;
+    StrippedUser User;
+}
+
+class StrippedFan implements StrippedUser{
+    String fName;
+    String lName;
+}
+
+class StrippedCreator implements StrippedUser{
+    String studioName;
+    String webAddress;
+}
+
+interface StrippedUser{
+
+}
 public class creatorModel extends Model{
-    private final FirebaseFunctions mFunctions;
+
     public creatorModel(){
-        this.mFunctions = FirebaseFunctions.getInstance();
+        super.mFunctions = FirebaseFunctions.getInstance();
     }
 
     public void update(Anime anime, String token){
@@ -55,4 +80,26 @@ public class creatorModel extends Model{
                 });
     }
 
+    public void editUser(String token, String type, User user){
+        UserAndTokenAndType obj = new UserAndTokenAndType();
+        obj.Token=token;
+        obj.Type=type;
+        if(Objects.equals(type, "fan")){
+            StrippedFan strippedFan = new StrippedFan();
+            strippedFan.fName = ((Fan) user).getFName();
+            strippedFan.lName = ((Fan) user).getLName();
+
+            obj.User=strippedFan;
+        }else{
+            StrippedCreator strippedCreator = new StrippedCreator();
+            strippedCreator.studioName = ((Creator) user).getStudioName();
+            strippedCreator.webAddress = ((Creator) user).getWebAddress();
+
+            obj.User=strippedCreator;
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(obj, UserAndTokenAndType.class);
+        Log.e("edit_json", json);
+    }
 }

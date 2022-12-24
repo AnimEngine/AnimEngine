@@ -1,22 +1,42 @@
 package AnimEngine.mobile;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
-import AnimEngine.mobile.adapters.SectionsPagerAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
-public class EngineActivity extends AppCompatActivity implements View.OnClickListener{
+import AnimEngine.mobile.adapters.SectionsPagerAdapter;
+import AnimEngine.mobile.classes.UserAndToken;
+
+public class EngineActivity extends AppCompatActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener {
+
+    UserAndToken fan;
+
+    BottomNavigationView bottomNavigationView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_engine);
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.home_page);
+
+        bottomNavigationView.setOnItemSelectedListener(this);
+
+        fan = (UserAndToken) getIntent().getSerializableExtra("fan");
 
         findViewById(R.id.button_show_information).setOnClickListener(this);
 
@@ -49,5 +69,40 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
             // Show the Alert Dialog box
             alertDialog.show();
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Intent intent;
+        int curr = item.getItemId();
+
+        if (R.id.profile_page == curr) {
+            intent = new Intent(this, ProfileActivity.class);
+            intent.putExtra("fan", fan);
+            startActivity(intent);
+            finish();
+
+            return true;
+        }
+
+        if (R.id.catalog_page == curr) {
+            intent = new Intent(this, CatalogActivity.class);
+            intent.putExtra("fan", fan);
+            startActivity(intent);
+            finish();
+
+            return true;
+        }
+
+        if (R.id.home_page == curr) {
+            intent = new Intent(this, EngineActivity.class);
+            intent.putExtra("fan", fan);
+            startActivity(intent);
+            finish();
+
+            return true;
+        }
+
+        return false;
     }
 }

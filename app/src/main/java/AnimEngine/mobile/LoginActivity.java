@@ -136,8 +136,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
 
-            Intent intent = new Intent(this, EngineActivity.class);
-            startActivity(intent);
+
         }
 
         if(view == findViewById(R.id.button_login)){
@@ -162,8 +161,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void update(Observable observable, Object o) {
+    public void update(Observable o, Object arg) {
         String result = this.model.getResult();
+
+        creator = this.model.getCreator();
+        fan = this.model.getFan();
+
         if(Objects.equals(result, ""))
             return;
 
@@ -171,12 +174,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             switch (this.model.getAction()){
                 case userModel.LOGIN:
                     Toast.makeText(getApplicationContext(), "Logged in Successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(this, CreateActivity.class);
-                    intent.putExtra("creator",creator);
-                    startActivity(intent);
-                    finish();
-                    break;
+                    if(fan.getUser() != null){
+                        //fan connection
+                        Intent intent = new Intent(this, EngineActivity.class);
+                        intent.putExtra("fan",fan);
+                        startActivity(intent);
+                        finish();
 
+                        return;
+                    }
+                    else if (creator.getUser() != null){
+                        Intent intent = new Intent(this, CreateActivity.class);
+                        intent.putExtra("creator",creator);
+                        startActivity(intent);
+                        finish();
+
+                        return;
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "WAT???!", Toast.LENGTH_SHORT).show();
+                    }
                 case userModel.FORGOT:
                     Toast.makeText(getApplicationContext(), "Password updated Successfully!", Toast.LENGTH_SHORT).show();
                     bsd.cancel();
@@ -198,10 +215,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     bsd.cancel();
                     break;
             }
-
-
-
-
         }
     }
 }
