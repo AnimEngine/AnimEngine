@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,8 +16,10 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -25,11 +28,15 @@ import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.DBAndStorageModel;
+import AnimEngine.mobile.util.RunnableWithStatus;
 
 public class EngineActivity extends AppCompatActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener, Observer {
 
@@ -43,6 +50,8 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
 
     BottomNavigationView bottomNavigationView;
     Queue<Anime> animeQueue;
+    Queue<RunnableWithStatus<Bitmap>> animeImageTasksQueue;
+    HashMap<String, RunnableWithStatus<Bitmap>> animeImageTasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +70,8 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         bottomNavigationView.setOnItemSelectedListener(this);
 
         animeQueue = new LinkedList<>();
+        animeImageTasksQueue = new LinkedList<>();
+        animeImageTasks = new HashMap<>();
 
         fan = (UserAndToken) getIntent().getSerializableExtra("fan");
         fanObj = (Fan) fan.getUser();
@@ -79,9 +90,29 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         }
         else{
             Anime currentAnime = animeQueue.poll();
+
+            if(animeImageTasksQueue.peek().isFinished()) {
+                Bitmap currentImage = Objects.requireNonNull(animeImageTasks.get(currentAnime.getName()).getRet());
+                imageViewAnimeImage.setImageBitmap(currentImage);
+            }
+
             textViewAnimeName.setText(currentAnime.getName());
-            Picasso.get().load(currentAnime.getImageURL()).into(imageViewAnimeImage);
+
         }
+    }
+    private void displayFirstAnime(Anime anime){
+        Picasso.get().load(anime.getImageURL()).into(imageViewAnimeImage, new Callback() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+        textViewAnimeName.setText(anime.getName());
     }
 
     @Override
@@ -155,19 +186,48 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         if(result.startsWith("OK")){
             String currentAction = model.getAction();
 
-            if (Objects.equals(currentAction, DBAndStorageModel.GET_BEST_K)){
+            if (Objects.equals(currentAction, DBAndStorageModel.GET_BEST_K)) {
                 animeQueue.clear();
+                animeImageTasksQueue.clear();
 
                 List<String> animeNames = model.getGetBestKAnimeResult();
                 HashMap<String, Anime> animeObjects = model.getGetAnimeResult();
-                for(String name:animeNames){
+                if(!animeNames.isEmpty()) {
+                    String animeName = animeNames.remove(0);
+                    Anime currentAnime = animeObjects.remove(animeName);
+                    currentAnime.setName(animeName);
+
+                    displayFirstAnime(currentAnime);
+                }else
+                    return;
+
+
+                for (String name : animeNames) {
                     Anime currentAnime = animeObjects.get(name);
                     currentAnime.setName(name);
 
                     animeQueue.add(currentAnime);
+
+
+                    RunnableWithStatus<Bitmap> runnable = new RunnableWithStatus<Bitmap>(() -> {
+                        try {
+                            return Picasso.get().load(currentAnime.getImageURL()).get();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            return null;
+                        }
+                    });
+                    animeImageTasksQueue.add(runnable);
+                    animeImageTasks.put(currentAnime.getName(), runnable);
+
+                }
+                Executor executor = Executors.newFixedThreadPool(5);
+                for (Runnable job : animeImageTasks.values()) {
+                    executor.execute(job);
                 }
 
-                displayNextAnime();
+
+                //displayNextAnime();
             }
 
             //Toast.makeText(getApplicationContext(), "Anime recommendations get success!", Toast.LENGTH_SHORT).show();

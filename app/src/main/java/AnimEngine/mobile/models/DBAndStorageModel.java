@@ -118,9 +118,6 @@ public class DBAndStorageModel extends Model{
                     }else{
                         result = "ERROR";
                     }
-
-                    setChanged();
-                    notifyObservers();
                 });
     }
     public void getAnime(List<String> animeNames, boolean isIndependent){
