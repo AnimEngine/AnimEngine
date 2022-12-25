@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,6 +26,7 @@ import java.util.Observer;
 
 import AnimEngine.mobile.adapters.SectionsPagerAdapter;
 import AnimEngine.mobile.classes.Anime;
+import AnimEngine.mobile.classes.Comment;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.dbAndStorageModel;
@@ -38,6 +41,7 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
     BottomNavigationView bottomNavigationView;
     ArrayList<Anime> animeArrayList;
 
+    RatingBar RatingBarAnime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +63,8 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.button_show_information).setOnClickListener(this);
 
         model.getBestKAnime(fan.getToken());
+
+        findViewById(R.id.button_add_comment).setOnClickListener(this);
 
     }
 
@@ -89,6 +95,37 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
             // Show the Alert Dialog box
             alertDialog.show();
         }
+//        if(view == findViewById(R.id.button_add_comment)){
+//
+//            setContentView(R.layout.activity_add_comment_fan);
+//
+//            final RatingBar simpleRatingBar = (RatingBar) findViewById(R.id.rate_anime_stars);
+//            Button submitButton = (Button) findViewById(R.id.button_send_comment);
+//            // perform click event on button
+//            submitButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    // get values and then displayed in a toast
+//                    String animeName = ;
+//                    String content;
+//                    float stars = simpleRatingBar.getRating();;
+//
+//                    String totalStars = "Total Stars:: " + simpleRatingBar.getNumStars();
+//                    String rating = "Rating :: " + stars;
+//                    Toast.makeText(getApplicationContext(), totalStars + "\n" + rating, Toast.LENGTH_LONG).show();
+//
+//
+//
+//                    Comment comment = new Comment()
+//                    uploadComment()
+//
+//
+//                }
+//            });
+//
+//
+//        }
+
     }
 
     @Override
