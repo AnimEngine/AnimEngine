@@ -28,7 +28,7 @@ import AnimEngine.mobile.adapters.ProfileRVAdapter;
 import AnimEngine.mobile.classes.Creator;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.UserAndToken;
-import AnimEngine.mobile.models.creatorModel;
+import AnimEngine.mobile.models.CreatorModel;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener, Observer {
 
@@ -36,7 +36,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     UserAndToken creator;
     Creator creatorObj;
 
-    creatorModel model;
+    CreatorModel model;
 
     UserAndToken fan;
     Fan fanObj;
@@ -75,7 +75,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         keyValuePairs = new ArrayList<>();
 
-        model = new creatorModel();
+        model = new CreatorModel();
         model.addObserver(this);
 
         creator = (UserAndToken) getIntent().getSerializableExtra("creator");

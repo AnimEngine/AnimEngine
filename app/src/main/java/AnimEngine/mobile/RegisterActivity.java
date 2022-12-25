@@ -30,12 +30,12 @@ import AnimEngine.mobile.adapters.SectionsPagerAdapter;
 import AnimEngine.mobile.classes.Creator;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.User;
-import AnimEngine.mobile.models.userModel;
+import AnimEngine.mobile.models.UserModel;
 import AnimEngine.mobile.util.CheckEmail;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, Observer {
 
-    userModel model;
+    UserModel model;
 
     HashMap<String, EditText> creatorEditTexts = new HashMap<>();
     HashMap<String, EditText> fanEditTexts = new HashMap<>();
@@ -55,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        model = new userModel(null, null);
+        model = new UserModel(null, null);
         model.addObserver(this);
 
         myViewPager2 = findViewById(R.id.view_pager_register);

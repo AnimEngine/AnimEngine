@@ -6,10 +6,9 @@ import com.google.gson.Gson;
 
 import java.util.HashMap;
 
-import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.classes.Comment;
 
-public class fanModel extends Model{
+public class FanModel extends Model{
 
 
     public void uploadComment(Comment comment){

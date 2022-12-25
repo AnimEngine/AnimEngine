@@ -35,7 +35,7 @@ class StrippedCreator implements StrippedUser{
 
 interface StrippedUser{
 }
-public class creatorModel extends Model{
+public class CreatorModel extends Model{
 
     public void update(Anime anime, String token){
         Gson gson = new Gson();
