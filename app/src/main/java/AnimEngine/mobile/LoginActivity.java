@@ -4,35 +4,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import AnimEngine.mobile.classes.Creator;
-import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.UserAndToken;
-import AnimEngine.mobile.models.userModel;
+import AnimEngine.mobile.models.UserModel;
 import AnimEngine.mobile.util.CheckEmail;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, Observer {
 
-    userModel model;
+    UserModel model;
     UserAndToken creator;
     UserAndToken fan;
 
@@ -51,7 +43,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         this.creator = new UserAndToken();
         this.fan = new UserAndToken();
 
-        model = new userModel(creator, fan);
+        model = new UserModel(creator, fan);
         model.addObserver(this);
 
         findViewById(R.id.text_link_forgot_password).setOnClickListener(this);
@@ -172,7 +164,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if(result.startsWith("OK")){
             switch (this.model.getAction()){
-                case userModel.LOGIN:
+                case UserModel.LOGIN:
                     Toast.makeText(getApplicationContext(), "Logged in Successfully!", Toast.LENGTH_SHORT).show();
                     if(fan.getUser() != null){
                         //fan connection
@@ -194,7 +186,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     else{
                         Toast.makeText(getApplicationContext(), "WAT???!", Toast.LENGTH_SHORT).show();
                     }
-                case userModel.FORGOT:
+                case UserModel.FORGOT:
                     Toast.makeText(getApplicationContext(), "Password updated Successfully!", Toast.LENGTH_SHORT).show();
                     bsd.cancel();
                     break;
@@ -207,11 +199,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
             switch (this.model.getAction()){
-                case userModel.LOGIN:
+                case UserModel.LOGIN:
                     stopLoadingAnimation();
                     break;
 
-                case userModel.FORGOT:
+                case UserModel.FORGOT:
                     bsd.cancel();
                     break;
             }

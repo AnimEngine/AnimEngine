@@ -28,14 +28,14 @@ import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.classes.Creator;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.UserAndToken;
-import AnimEngine.mobile.models.dbAndStorageModel;
+import AnimEngine.mobile.models.DBAndStorageModel;
 
 public class CatalogActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, Observer {
 
     ArrayList<Anime> arrayList;
     RecyclerView rv;
 
-    dbAndStorageModel model;
+    DBAndStorageModel model;
     boolean isCreator;
 
     UserAndToken creator;
@@ -53,7 +53,7 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
 
         keyValuePairs = new ArrayList<>();
 
-        model = new dbAndStorageModel();
+        model = new DBAndStorageModel();
         model.addObserver(this);
         model.getAllAnime();
 

@@ -46,13 +46,13 @@ import AnimEngine.mobile.adapters.CreateRVAdapter;
 import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.classes.Genre;
 import AnimEngine.mobile.classes.UserAndToken;
-import AnimEngine.mobile.models.creatorModel;
+import AnimEngine.mobile.models.CreatorModel;
 
 public class CreateActivity extends AppCompatActivity implements View.OnClickListener, Observer, NavigationBarView.OnItemSelectedListener {
 
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
-    creatorModel model;
+    CreatorModel model;
     UserAndToken creator;
 
     ImageView animeImage;
@@ -92,7 +92,7 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
         TextInputLayout textInputLayoutNameDescription = findViewById(R.id.text_input_anime_description);
         animeDescription = textInputLayoutNameDescription.getEditText();
 
-        model = new creatorModel();
+        model = new CreatorModel();
         model.addObserver(this);
 
         animeImage = findViewById(R.id.image_create);
