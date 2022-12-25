@@ -2,32 +2,17 @@ package AnimEngine.mobile.models;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.core.util.Consumer;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
-import com.google.firebase.functions.FirebaseFunctions;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.Observable;
 
 import AnimEngine.mobile.classes.Creator;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.User;
 import AnimEngine.mobile.classes.UserAndToken;
-public class userModel extends Model{
+public class UserModel extends Model{
 
     private String action = NONE;
 
@@ -40,7 +25,7 @@ public class userModel extends Model{
 
     public static final String NONE = "NONE";
 
-    public userModel(UserAndToken creator, UserAndToken fan){
+    public UserModel(UserAndToken creator, UserAndToken fan){
         this.creator=creator;
         this.fan=fan;
     }
