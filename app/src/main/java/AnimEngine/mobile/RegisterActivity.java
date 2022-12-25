@@ -165,7 +165,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
 
             User user;
-            HashMap<String, String> genres = new HashMap<>();
             if(isCreator)
                 user = new Creator(email, password, "creator", studioName, website);
             else

@@ -1,16 +1,15 @@
 package AnimEngine.mobile.models;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 import AnimEngine.mobile.classes.Anime;
 
@@ -18,8 +17,12 @@ public class dbAndStorageModel extends Model{
     List animeList;
     ArrayList<Anime> animeArrayList;
 
+    HashMap getAnimeResult;
+
+    Gson gson = new Gson();
+
     public void getAllAnime(){
-        Gson gson = new Gson();
+
         final JSONObject[] animeArray = {null};
         animeArrayList = new ArrayList<>();
         this.mFunctions
@@ -71,12 +74,80 @@ public class dbAndStorageModel extends Model{
                     }
                 });
     }
+    public void getBestKAnime(String token){
+        Gson gson = new Gson();
+        String json = String.format("{\"Token\":\"%s\"}", token);
 
-    public void getBestKAnime(){
+        final List[] animeNames = new List[1];
 
+        Log.d("engine_json",json);
+        this.mFunctions
+                .getHttpsCallable("getBestKAnime")
+                .call(json).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        HashMap map = (HashMap) task.getResult().getData();
+                        if (map == null) {
+                            result = "ERROR";
+                        } else {
+                            if (map.containsKey("ok")) {
+                                result = "OK";
+                                String animeArrayString = (String) map.get("ok");
+                                if (!Objects.equals(animeArrayString, "null")) {
+
+                                    animeNames[0] = gson.fromJson((String) animeArrayString, List.class);
+
+                                    this.getAnime(animeNames[0]);
+
+                                    result = "OK";
+                                }
+                                } else {
+                                    result = "ERROR:" + map.get("error");
+                                }
+                            }
+
+                        }else{
+                            result = "ERROR";
+                        }
+
+                        setChanged();
+                        notifyObservers();
+                    });
     }
 
+    public void getAnime(List<String> animeNames){
+        HashMap<String, List<String>> inputMap = new HashMap<>();
+        inputMap.put("anime", animeNames);
+        String json = gson.toJson(inputMap, HashMap.class);
+        Log.d("getAnime_json", json);
+        this.mFunctions
+                .getHttpsCallable("getAnime")
+                .call(json).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        HashMap outputMap = (HashMap) task.getResult().getData();
+                        if (outputMap == null) {
+                            result = "ERROR";
+                        } else {
+                            if (outputMap.containsKey("ok")) {
+                                result = "OK";
+                                String animeDictString = (String) outputMap.get("ok");
+                                if (!Objects.equals(animeDictString, "null")) {
 
+                                    getAnimeResult = gson.fromJson((String) animeDictString, HashMap.class);
+                                    result = "OK";
+                                }
+                            } else {
+                                result = "ERROR:" + outputMap.get("error");
+                            }
+                        }
+
+                    }else{
+                        result = "ERROR";
+                    }
+
+                    setChanged();
+                    notifyObservers();
+                });
+    }
 
     public List getAnimeList() {
         return animeList;
