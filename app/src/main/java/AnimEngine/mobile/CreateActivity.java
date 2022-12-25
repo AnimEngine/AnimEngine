@@ -183,6 +183,7 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
 
         if(result.startsWith("OK")){
             Toast.makeText(getApplicationContext(), "Anime created Successfully!", Toast.LENGTH_SHORT).show();
+
         }else{
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
         }
