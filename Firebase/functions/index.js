@@ -20,6 +20,7 @@ const creatorRef = db.ref("/Users/Creator");
 const fanRef = db.ref("/Users/Fan");
 
 const animeRef = db.ref("/Anime");
+const commentRef = db.ref("/Comments")
 
 const storage = admin.storage().bucket();
 
@@ -528,3 +529,42 @@ exports.getBestKAnime = functions.https.onRequest(async (request, response) => {
   
 
 
+  
+exports.uploadComment =functions.https.onRequest(async (request, response) => {
+    /*
+    {
+        "comment": {
+            "animeRef" : animeName
+            "content" : comments
+            "stars" : 1-5 stars 
+        }
+
+    }
+    const json = request.body["data"];
+    */  
+    const json = request.body["data"];
+    console.log(json);
+    const inputObj = JSON.parse(json);
+    const commentObj = inputObj["comment"];
+
+    const animeName = commentObj["animeRef"];
+    console.log(animeName);
+
+    const content = commentObj["content"];
+    console.log(content);
+
+    const stars = commentObj["stars"];
+    console.log(stars);
+
+    
+    await commentRef.child(animeName).set(commentObj)
+        .then((obj) => {
+            response.json({"data":{"ok":"Comment uploaded successfully!"}});
+            return;
+        })
+        .catch(error => {
+            response.json({"data":{"error":`${error}`}});
+            return;
+        });
+
+});
