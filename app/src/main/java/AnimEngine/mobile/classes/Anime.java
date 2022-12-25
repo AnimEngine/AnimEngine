@@ -11,6 +11,7 @@ public class Anime {
     private String ownerUID;
 
 
+
     public Anime(String name){
 
     }

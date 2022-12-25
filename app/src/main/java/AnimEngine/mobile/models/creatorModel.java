@@ -2,9 +2,6 @@ package AnimEngine.mobile.models;
 
 import android.util.Log;
 
-import androidx.core.util.Pair;
-
-import com.google.firebase.functions.FirebaseFunctions;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -118,5 +115,38 @@ public class creatorModel extends Model{
                     setChanged();
                     notifyObservers();
                 });
+    }
+
+    public void EditAnime(Anime anime, String token) {
+        Gson gson = new Gson();
+        AnimeAndToken animeAndToken = new AnimeAndToken();
+        animeAndToken.token=token;
+        animeAndToken.anime=anime;
+        String json = gson.toJson(animeAndToken, AnimeAndToken.class);
+        Log.d("update_json_anime", json);
+        this.mFunctions
+                .getHttpsCallable("editAnime")
+                .call(json).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        HashMap map = (HashMap) task.getResult().getData();
+                        if (map == null) {
+                            result = "ERROR";
+                        }
+                        else {
+                            if (map.containsKey("ok")) {
+                                result = "OK";
+                            }
+                            else {
+                                result = "ERROR:" + map.get("error");
+                            }
+                        }
+                    }
+                    else{
+                        result = "ERROR";
+                    }
+                    setChanged();
+                    notifyObservers();
+                });
+
     }
 }

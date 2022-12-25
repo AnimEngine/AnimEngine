@@ -47,7 +47,7 @@
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/button_watch_later_anime"
+                android:id="@+id/button_not_watch_later_anime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_cancel"
@@ -79,7 +79,7 @@
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/button_pass_anime"
+                android:id="@+id/button_watch_later_anime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_check_encircled"
