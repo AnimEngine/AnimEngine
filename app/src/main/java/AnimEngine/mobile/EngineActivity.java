@@ -3,47 +3,56 @@ package AnimEngine.mobile;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.Navigation;
-import androidx.viewpager2.widget.ViewPager2;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Queue;
 
-import AnimEngine.mobile.adapters.SectionsPagerAdapter;
 import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.UserAndToken;
-import AnimEngine.mobile.models.dbAndStorageModel;
+import AnimEngine.mobile.models.DBAndStorageModel;
 
 public class EngineActivity extends AppCompatActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener, Observer {
+
+    TextView textViewAnimeName;
+    ImageView imageViewAnimeImage;
 
     UserAndToken fan;
     Fan fanObj;
 
-    dbAndStorageModel model;
+    DBAndStorageModel model;
 
     BottomNavigationView bottomNavigationView;
-    ArrayList<Anime> animeArrayList;
+    Queue<Anime> animeQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_engine);
 
-        model = new dbAndStorageModel();
+        textViewAnimeName = findViewById(R.id.text_view_anime_name_engine);
+        imageViewAnimeImage = findViewById(R.id.image_anime_engine);
+
+        model = new DBAndStorageModel();
         model.addObserver(this);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -51,15 +60,28 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
 
         bottomNavigationView.setOnItemSelectedListener(this);
 
-        animeArrayList = new ArrayList<>();
+        animeQueue = new LinkedList<>();
 
         fan = (UserAndToken) getIntent().getSerializableExtra("fan");
         fanObj = (Fan) fan.getUser();
 
         findViewById(R.id.button_show_information).setOnClickListener(this);
+        findViewById(R.id.button_not_watch_later_anime).setOnClickListener(this);
+        findViewById(R.id.button_watch_later_anime).setOnClickListener(this);
 
         model.getBestKAnime(fan.getToken());
 
+    }
+
+    private void displayNextAnime(){
+        if(animeQueue.isEmpty()){
+            Toast.makeText(getApplicationContext(),"No more anime's left to recommend!",Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Anime currentAnime = animeQueue.poll();
+            textViewAnimeName.setText(currentAnime.getName());
+            Picasso.get().load(currentAnime.getImageURL()).into(imageViewAnimeImage);
+        }
     }
 
     @Override
@@ -88,6 +110,10 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
             AlertDialog alertDialog = builder.create();
             // Show the Alert Dialog box
             alertDialog.show();
+        }
+
+        if(view == findViewById(R.id.button_not_watch_later_anime)){
+            displayNextAnime();
         }
     }
 
@@ -121,13 +147,35 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void update(Observable o, Object arg) {
         String result = this.model.getResult();
+
+
         if(Objects.equals(result, ""))
             return;
 
         if(result.startsWith("OK")){
-            Toast.makeText(getApplicationContext(), "Anime recommendations get success!", Toast.LENGTH_SHORT).show();
+            String currentAction = model.getAction();
+
+            if (Objects.equals(currentAction, DBAndStorageModel.GET_BEST_K)){
+                animeQueue.clear();
+
+                List<String> animeNames = model.getGetBestKAnimeResult();
+                HashMap<String, Anime> animeObjects = model.getGetAnimeResult();
+                for(String name:animeNames){
+                    Anime currentAnime = animeObjects.get(name);
+                    currentAnime.setName(name);
+
+                    animeQueue.add(currentAnime);
+                }
+
+                displayNextAnime();
+            }
+
+            //Toast.makeText(getApplicationContext(), "Anime recommendations get success!", Toast.LENGTH_SHORT).show();
+
+
         }else{
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
         }
     }
+
 }
