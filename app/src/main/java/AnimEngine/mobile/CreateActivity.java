@@ -102,6 +102,7 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
         recyclerView.setAdapter(customCreateRVAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(CreateActivity.this));
 
+
         pickMedia =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     // Callback is invoked after the user selects a media item or closes the

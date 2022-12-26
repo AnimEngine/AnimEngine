@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -59,10 +60,12 @@ public class CreateRVAdapter extends RecyclerView.Adapter<CreateRVAdapter.MyView
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Toast.makeText(mContext, "bidning adapter "+viewHolder.getBindingAdapterPosition()+"\n"+"layout pos "+viewHolder.getLayoutPosition(), Toast.LENGTH_SHORT).show();
+                Slider slider1 = checkBox_Slider_pairs.get(viewHolder.getLayoutPosition()).second;
                 if(isChecked)
-                    slider.setVisibility(View.VISIBLE);
+                    slider1.setVisibility(View.VISIBLE);
                 else
-                    slider.setVisibility(View.INVISIBLE);
+                    slider1.setVisibility(View.INVISIBLE);
             }
         });
 

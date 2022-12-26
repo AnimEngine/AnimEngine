@@ -5,6 +5,7 @@ import static android.view.View.GONE;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +25,9 @@ import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 
+import AnimEngine.mobile.adapters.CatalogRVAdapter;
 import AnimEngine.mobile.adapters.ProfileRVAdapter;
+import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.classes.Creator;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.UserAndToken;
@@ -40,6 +43,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     UserAndToken fan;
     Fan fanObj;
+
+    ArrayList<Anime> animeList;
+    RecyclerView animeRecyclerView;
+    CatalogRVAdapter customCatalogRVAdapter;
 
     RecyclerView userFieldsRecyclerView;
     ProfileRVAdapter adapter;
@@ -74,6 +81,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
         keyValuePairs = new ArrayList<>();
+        animeList = new ArrayList<>();
 
         model = new CreatorModel();
         model.addObserver(this);
@@ -87,6 +95,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             keyValuePairs.add(new Pair<>("Studio Name: ", creatorObj.getStudioName()));
             keyValuePairs.add(new Pair<>("Website: ", creatorObj.getWebAddress()));
+
+            this.model.getAllAnimeOfCreator(creator.getToken());
+            animeRecyclerView = findViewById(R.id.recycler_profile_creator_anime);
+            animeRecyclerView.setVisibility(View.VISIBLE);
+
+            customCatalogRVAdapter = new CatalogRVAdapter(this, getLayoutInflater(), animeList, true, creatorObj);
+            animeRecyclerView.setAdapter(customCatalogRVAdapter);
+            animeRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
 
             bottomNavigationViewCreator.setVisibility(View.VISIBLE);
         }
@@ -199,17 +215,29 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+
+
     @Override
     public void update(Observable o, Object arg) {
         String result = this.model.getResult();
+        String action = this.model.getAction();
 
         if(Objects.equals(result, ""))
             return;
 
         if(result.startsWith("OK")){
-            Toast.makeText(getApplicationContext(), "User updated Successfully!", Toast.LENGTH_SHORT).show();
-            adapter.setEdited(false);
-            hideActionButtons();
+            if(Objects.equals(action, CreatorModel.EDIT_USER)) {
+                Toast.makeText(getApplicationContext(), "User updated Successfully!", Toast.LENGTH_SHORT).show();
+                adapter.setEdited(false);
+                hideActionButtons();
+            }
+
+            if(Objects.equals(action, CreatorModel.GET_ALL_ANIME_OF_CREATOR)){
+                animeList.clear();
+                animeList.addAll(model.getGetAllAnimeOfCreatorResult());
+
+                customCatalogRVAdapter.notifyDataSetChanged();
+            }
 
         }else {
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();

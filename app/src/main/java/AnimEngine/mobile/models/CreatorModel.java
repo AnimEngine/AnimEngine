@@ -44,6 +44,9 @@ public class CreatorModel extends Model{
     }.getType();
     List<Anime> getAllAnimeOfCreatorResult;
 
+    public static final String EDIT_USER = "EDIT_USER";
+    public static final String GET_ALL_ANIME_OF_CREATOR = "GET_ALL_ANIME_OF_CREATOR";
+
     public void update(Anime anime, String token){
         Gson gson = new Gson();
         AnimeAndToken animeAndToken = new AnimeAndToken();
@@ -80,6 +83,8 @@ public class CreatorModel extends Model{
     }
 
     public void editUser(String token, String type, User user){
+        action = EDIT_USER;
+
         UserAndTokenAndType obj = new UserAndTokenAndType();
         obj.Token=token;
         obj.Type=type;
@@ -158,6 +163,7 @@ public class CreatorModel extends Model{
     }
 
     public void getAllAnimeOfCreator(String token){
+        action = GET_ALL_ANIME_OF_CREATOR;
         Gson gson = new Gson();
 
 
@@ -167,7 +173,7 @@ public class CreatorModel extends Model{
 
         this.mFunctions
                 .getHttpsCallable("getAllAnimeOfCreator")
-                .call().addOnCompleteListener(task -> {
+                .call(json).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         HashMap outputMap = (HashMap) task.getResult().getData();
                         if (outputMap == null) {
@@ -191,5 +197,9 @@ public class CreatorModel extends Model{
                 });
 
 
+    }
+
+    public List<Anime> getGetAllAnimeOfCreatorResult() {
+        return getAllAnimeOfCreatorResult;
     }
 }

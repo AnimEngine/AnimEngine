@@ -32,9 +32,17 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_profile"
         android:layout_width="match_parent"
-        android:layout_height="530dp"
+        android:layout_height="300dp"
         android:layout_below="@id/text_title_profile_header"
         android:layout_marginTop="10dp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_profile_creator_anime"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/recycler_profile"
+        android:visibility="gone"
         />
 
     <LinearLayout

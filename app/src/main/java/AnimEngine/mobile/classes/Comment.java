@@ -6,7 +6,7 @@ public class Comment {
     private String content;
     private float stars; //stars = [1,5]
 
-    public Comment(String animeRef, String authorName, String content, int stars){
+    public Comment(String animeRef, String authorName, String content, float stars){
         this.animeRef = animeRef;
         this.authorName = authorName;
         this.content = content;

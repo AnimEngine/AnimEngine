@@ -37,6 +37,7 @@ import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.User;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.DBAndStorageModel;
+import AnimEngine.mobile.models.FanModel;
 
 public class CatalogActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener, Observer {
 
@@ -77,6 +78,7 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
         model.getAllAnime();
 
         TextView tv_title = findViewById(R.id.catalog_tv);
+
 
         //BottomNavigationView bottomNavigation = findViewById(R.id.catalog_bottom_navigation);
 

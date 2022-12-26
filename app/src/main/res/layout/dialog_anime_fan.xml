@@ -91,23 +91,23 @@
                     android:text="Regina Phalange" />
 <!--            </LinearLayout>-->
 
-            <RatingBar
-                android:id="@+id/rating_commend_add_dialog"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/image_user_dialog"
-                android:layout_below="@+id/text_view_name_add_comment_dialog"
-                android:numStars="5"
-                android:rating="4"
+                <RatingBar
+                    android:id="@+id/rating_commend_add_dialog"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/image_user_dialog"
+                    android:layout_below="@+id/text_view_name_add_comment_dialog"
+                    android:numStars="5"
 
-                />
+                    />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
             <EditText
+                android:id="@+id/text_edit_comment"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:hint="Please enter your comment!"
