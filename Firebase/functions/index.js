@@ -527,14 +527,13 @@ exports.getBestKAnime = functions.https.onRequest(async (request, response) => {
     // });
 });
   
-
-
-  
 exports.uploadComment =functions.https.onRequest(async (request, response) => {
     /*
     {
+        "Token": "l;sdmflksdf"
         "comment": {
             "animeRef" : animeName
+            "authorName" : "john baker"
             "content" : comments
             "stars" : 1-5 stars 
         }
@@ -545,10 +544,21 @@ exports.uploadComment =functions.https.onRequest(async (request, response) => {
     const json = request.body["data"];
     console.log(json);
     const inputObj = JSON.parse(json);
+
+    const token = inputObj["Token"];
+    console.log(token);
+
+    var uid = await getUIDUsingToken(token).catch(error => {
+        response.json({"data":{"error":`${error}`}});
+        return;
+    });
+
     const commentObj = inputObj["comment"];
 
     const animeName = commentObj["animeRef"];
     console.log(animeName);
+
+    delete commentObj["authorName"];
 
     const content = commentObj["content"];
     console.log(content);
@@ -557,7 +567,7 @@ exports.uploadComment =functions.https.onRequest(async (request, response) => {
     console.log(stars);
 
     
-    await commentRef.child(animeName).set(commentObj)
+    await commentRef.child(animeName).child(uid).set(commentObj)
         .then((obj) => {
             response.json({"data":{"ok":"Comment uploaded successfully!"}});
             return;
@@ -567,4 +577,42 @@ exports.uploadComment =functions.https.onRequest(async (request, response) => {
             return;
         });
 
+});
+
+exports.getAllComments = functions.https.onRequest(async (request, response) => {
+    const fans = await fanRef.get().catch(error => {
+        response.json({"data":{"error":`${error}`}});
+        return;
+    });
+
+    var comments = {}
+
+
+
+
+    await commentRef.once('value').then((snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+            var commentList = []
+
+            var commentsForAnime = childSnapshot.val();
+            var map = new Map(Object.entries(commentsForAnime));
+            var animeName =childSnapshot.key;
+            for (let [key, value] of map) {
+                var currentComment = value;
+                currentComment["authorName"] = `${fans[key].fName} ${fans[key].lName}`;
+                
+                commentList.push(currentComment);
+            }
+
+
+            comments[animeName] = commentList;
+        }
+        );
+    }).catch(error => {
+        response.json({"data":{"error":`${error}`}});
+        return;
+    });
+
+    response.json({"data":{"ok":JSON.stringify(comments)}});
+    return;
 });
