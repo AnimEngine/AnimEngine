@@ -78,7 +78,7 @@ public class CatalogRVAdapter extends RecyclerView.Adapter<CatalogRVAdapter.MyVi
                     Fan fan = ((Fan) user);
                     commenterName.setText(String.format("%s %s",fan.getFName(), fan.getLName()));
 
-                    Button uploadComment = view.findViewById(R.id.button_send_comment_dialog);
+                    ImageButton uploadComment = view.findViewById(R.id.button_send_comment_dialog);
                     uploadComment.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

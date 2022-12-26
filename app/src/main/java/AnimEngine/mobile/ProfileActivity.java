@@ -41,7 +41,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     UserAndToken fan;
     Fan fanObj;
 
-    RecyclerView recyclerView;
+    RecyclerView userFieldsRecyclerView;
     ProfileRVAdapter adapter;
     ArrayList<Pair<String, String>> keyValuePairs;
 
@@ -105,12 +105,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
 
-        recyclerView = findViewById(R.id.recycler_profile);
+        userFieldsRecyclerView = findViewById(R.id.recycler_profile);
 
         adapter =
                 new ProfileRVAdapter(ProfileActivity.this, getLayoutInflater(), keyValuePairs, this::showActionButtons);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ProfileActivity.this));
+        userFieldsRecyclerView.setAdapter(adapter);
+        userFieldsRecyclerView.setLayoutManager(new LinearLayoutManager(ProfileActivity.this));
     }
 
     @Override
@@ -198,8 +198,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     }
-
-
 
     @Override
     public void update(Observable o, Object arg) {

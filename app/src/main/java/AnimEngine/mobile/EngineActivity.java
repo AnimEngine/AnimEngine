@@ -10,17 +10,20 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,14 +31,16 @@ import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import AnimEngine.mobile.classes.Anime;
+import AnimEngine.mobile.classes.Comment;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.DBAndStorageModel;
+import AnimEngine.mobile.models.FanModel;
+import AnimEngine.mobile.models.Model;
 import AnimEngine.mobile.util.RunnableWithStatus;
 
 public class EngineActivity extends AppCompatActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener, Observer {
@@ -46,12 +51,16 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
     UserAndToken fan;
     Fan fanObj;
 
-    DBAndStorageModel model;
+    DBAndStorageModel DBModel;
+    FanModel fanModel;
 
     BottomNavigationView bottomNavigationView;
     Queue<Anime> animeQueue;
     Queue<RunnableWithStatus<Bitmap>> animeImageTasksQueue;
     HashMap<String, RunnableWithStatus<Bitmap>> animeImageTasks;
+
+    EditText content;
+    RatingBar stars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +70,10 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         textViewAnimeName = findViewById(R.id.text_view_anime_name_engine);
         imageViewAnimeImage = findViewById(R.id.image_anime_engine);
 
-        model = new DBAndStorageModel();
-        model.addObserver(this);
+        DBModel = new DBAndStorageModel();
+        fanModel = new FanModel();
+        DBModel.addObserver(this);
+        fanModel.addObserver(this);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.home_page);
@@ -79,8 +90,9 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.button_show_information).setOnClickListener(this);
         findViewById(R.id.button_not_watch_later_anime).setOnClickListener(this);
         findViewById(R.id.button_watch_later_anime).setOnClickListener(this);
+        findViewById(R.id.button_add_comment).setOnClickListener(this);
 
-        model.getBestKAnime(fan.getToken());
+        DBModel.getBestKAnime(fan.getToken());
 
     }
 
@@ -91,7 +103,7 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         else{
             Anime currentAnime = animeQueue.poll();
 
-            if(animeImageTasksQueue.peek().isFinished()) {
+            if(animeImageTasksQueue.poll().isFinished()) {
                 Bitmap currentImage = Objects.requireNonNull(animeImageTasks.get(currentAnime.getName()).getRet());
                 imageViewAnimeImage.setImageBitmap(currentImage);
             }
@@ -146,6 +158,21 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         if(view == findViewById(R.id.button_not_watch_later_anime)){
             displayNextAnime();
         }
+
+        if(view == findViewById(R.id.button_add_comment)){
+
+//            TextInputLayout contentInput = findViewById(R.id.button_send_comment);
+//            content = contentInput.getEditText();
+//            assert content != null;
+
+
+//            float ratingValue =  stars.getRating();
+//
+//            fanModel.uploadComment(new Comment("Another", content.getText().toString(), ratingValue, fan.getToken()));
+
+
+
+        }
     }
 
     @Override
@@ -177,21 +204,21 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void update(Observable o, Object arg) {
-        String result = this.model.getResult();
+        String result = ((Model) o).getResult();
 
 
         if(Objects.equals(result, ""))
             return;
 
         if(result.startsWith("OK")){
-            String currentAction = model.getAction();
+            String currentAction = ((Model) o).getAction();
 
             if (Objects.equals(currentAction, DBAndStorageModel.GET_BEST_K)) {
                 animeQueue.clear();
                 animeImageTasksQueue.clear();
 
-                List<String> animeNames = model.getGetBestKAnimeResult();
-                HashMap<String, Anime> animeObjects = model.getGetAnimeResult();
+                List<String> animeNames = DBModel.getGetBestKAnimeResult();
+                HashMap<String, Anime> animeObjects = DBModel.getGetAnimeResult();
                 if(!animeNames.isEmpty()) {
                     String animeName = animeNames.remove(0);
                     Anime currentAnime = animeObjects.remove(animeName);
@@ -225,11 +252,11 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
                 for (Runnable job : animeImageTasks.values()) {
                     executor.execute(job);
                 }
-
-
-                //displayNextAnime();
             }
 
+            if (Objects.equals(currentAction, FanModel.POST_COMMENT)){
+
+            }
             //Toast.makeText(getApplicationContext(), "Anime recommendations get success!", Toast.LENGTH_SHORT).show();
 
 

@@ -12,30 +12,39 @@ import java.util.List;
 import java.util.Objects;
 
 import AnimEngine.mobile.classes.Anime;
+import AnimEngine.mobile.classes.Comment;
 
-public class DBAndStorageModel extends Model{
+class CommentAndToken {
+    String Token;
+    Comment comment;
+}
+
+public class DBAndStorageModel extends Model {
     //getAllAnime
-    static Type getAllAnimeResultType = new TypeToken<List<Anime>>() {}.getType();
+    static Type getAllAnimeResultType = new TypeToken<List<Anime>>() {
+    }.getType();
     List<Anime> getAllAnimeResult;
 
     // getBestKAnime
-    static Type getBestKAnimeResultType = new TypeToken<List<String>>() {}.getType();
+    static Type getBestKAnimeResultType = new TypeToken<List<String>>() {
+    }.getType();
     List<String> getBestKAnimeResult;
 
     // getAnime
-    static Type getAnimeResultType = new TypeToken<HashMap<String, Anime>>() {}.getType();
+    static Type getAnimeResultType = new TypeToken<HashMap<String, Anime>>() {
+    }.getType();
     HashMap<String, Anime> getAnimeResult;
 
-    private String action = NONE;
 
     public static final String GET_ALL = "GET_ALL";
     public static final String GET_BEST_K = "GET_BEST_K";
     public static final String GET_ANIME = "GET_ANIME";
-    public static final String NONE = "NONE";
+    public static final String GET_ALL_COMMENTS = "GET_ALL_COMMENTS";
+
 
     Gson gson = new Gson();
 
-    public void getAllAnime(){
+    public void getAllAnime() {
         action = GET_ALL;
         getAllAnimeResult = new ArrayList<>();
 
@@ -60,7 +69,7 @@ public class DBAndStorageModel extends Model{
 //                                    e.printStackTrace();
 //                                }
                                 String animeArrayString = (String) map.get("ok");
-                                if (!Objects.equals(animeArrayString, "null")){
+                                if (!Objects.equals(animeArrayString, "null")) {
 
 
                                     getAllAnimeResult = gson.fromJson((String) animeArrayString, getAllAnimeResultType);
@@ -77,7 +86,7 @@ public class DBAndStorageModel extends Model{
                             }
                         }
 
-                    }else{
+                    } else {
                         result = "ERROR";
 
                         setChanged();
@@ -85,13 +94,14 @@ public class DBAndStorageModel extends Model{
                     }
                 });
     }
-    public void getBestKAnime(String token){
+
+    public void getBestKAnime(String token) {
         action = GET_BEST_K;
 
         Gson gson = new Gson();
         String json = String.format("{\"Token\":\"%s\"}", token);
 
-        Log.d("engine_json",json);
+        Log.d("engine_json", json);
         this.mFunctions
                 .getHttpsCallable("getBestKAnime")
                 .call(json).addOnCompleteListener(task -> {
@@ -115,13 +125,14 @@ public class DBAndStorageModel extends Model{
                             }
                         }
 
-                    }else{
+                    } else {
                         result = "ERROR";
                     }
                 });
     }
-    public void getAnime(List<String> animeNames, boolean isIndependent){
-        if(isIndependent)
+
+    public void getAnime(List<String> animeNames, boolean isIndependent) {
+        if (isIndependent)
             action = GET_ANIME;
 
         HashMap<String, List<String>> inputMap = new HashMap<>();
@@ -148,7 +159,7 @@ public class DBAndStorageModel extends Model{
                             }
                         }
 
-                    }else{
+                    } else {
                         result = "ERROR";
                     }
 
@@ -157,9 +168,33 @@ public class DBAndStorageModel extends Model{
                 });
     }
 
-    public String getAction() {
-        return action;
+    public void getAllComments() {
+        action = GET_ALL_COMMENTS;
+
+        this.mFunctions
+                .getHttpsCallable("getAllComments")
+                .call().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        HashMap outputMap = (HashMap) task.getResult().getData();
+                        if (outputMap == null) {
+                            result = "ERROR";
+                        } else {
+                            if (outputMap.containsKey("ok")) {
+                                result = "OK";
+                            } else {
+                                result = "ERROR:" + outputMap.get("error");
+                            }
+                        }
+
+                    } else {
+                        result = "ERROR";
+                    }
+
+                    setChanged();
+                    notifyObservers();
+                });
     }
+
 
     public List<Anime> getGetAllAnimeResult() {
         return getAllAnimeResult;

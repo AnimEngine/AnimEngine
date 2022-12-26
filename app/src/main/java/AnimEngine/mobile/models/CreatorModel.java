@@ -3,8 +3,11 @@ package AnimEngine.mobile.models;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import AnimEngine.mobile.classes.Anime;
@@ -36,6 +39,10 @@ class StrippedCreator implements StrippedUser{
 interface StrippedUser{
 }
 public class CreatorModel extends Model{
+
+    static Type getAllAnimeOfCreatorInputType = new TypeToken<List<Anime>>() {
+    }.getType();
+    List<Anime> getAllAnimeOfCreatorResult;
 
     public void update(Anime anime, String token){
         Gson gson = new Gson();
@@ -147,6 +154,42 @@ public class CreatorModel extends Model{
                     setChanged();
                     notifyObservers();
                 });
+
+    }
+
+    public void getAllAnimeOfCreator(String token){
+        Gson gson = new Gson();
+
+
+        String json = String.format("{\"Token\":\"%s\"}", token);
+
+        Log.d("update_json_anime", json);
+
+        this.mFunctions
+                .getHttpsCallable("getAllAnimeOfCreator")
+                .call().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        HashMap outputMap = (HashMap) task.getResult().getData();
+                        if (outputMap == null) {
+                            result = "ERROR";
+                        } else {
+                            if (outputMap.containsKey("ok")) {
+                                result = "OK";
+                                getAllAnimeOfCreatorResult = gson.fromJson((String) outputMap.get("ok"), getAllAnimeOfCreatorInputType);
+
+                            } else {
+                                result = "ERROR:" + outputMap.get("error");
+                            }
+                        }
+
+                    } else {
+                        result = "ERROR";
+                    }
+
+                    setChanged();
+                    notifyObservers();
+                });
+
 
     }
 }

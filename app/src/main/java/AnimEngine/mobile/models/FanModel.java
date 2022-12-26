@@ -3,19 +3,29 @@ package AnimEngine.mobile.models;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 
+import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.classes.Comment;
 
 public class FanModel extends Model{
 
+    public static final String POST_COMMENT = "POST_COMMENT";
+
+    static Type getUploadCommentInputType = new TypeToken<HashMap<String, Comment>>() {}.getType();
 
     public void uploadComment(Comment comment){
-        Gson gson = new Gson();
-        AnimeAndToken animeAndToken = new AnimeAndToken();
+        action = POST_COMMENT;
 
-        String json = gson.toJson(comment);
+        Gson gson = new Gson();
+        HashMap<String, Comment> inputMap = new HashMap<>();
+        inputMap.put("comment", comment);
+
+        String json = gson.toJson(inputMap, getUploadCommentInputType);
 
         Log.d("update_comment_json", json);
 
