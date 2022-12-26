@@ -5,7 +5,7 @@ const { auth } = require("firebase-admin/auth");
 const { user } = require("firebase-functions/v1/auth");
 const { error } = require("firebase-functions/logger");
 
-const serviceAccount = require('./animengine-fb858-firebase-adminsdk-1l8jr-9df9aa102d.json');
+const serviceAccount = require('./animengine-fb858-bbf71017f530.json');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://animengine-fb858-default-rtdb.firebaseio.com/",
@@ -427,6 +427,36 @@ exports.getAnime = functions.https.onRequest(async (request, response) => {
 
     response.json({"data":{"ok":JSON.stringify(animeRetObj)}});
     return;
+});
+
+exports.getAllAnimeOfCreator = functions.https.onRequest(async (request, response) => {
+    const json = request.body["data"];
+    inputObj = JSON.parse(json);
+
+    const token = userObj["Token"];
+    var uid = await getUIDUsingToken(token).catch(error => {
+        response.json({"data":{"error":`${error}`}});
+        return;
+    });
+
+    animes = []
+
+    await animeRef.once('value').then((snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+            var anime = childSnapshot.val();
+            anime.name=childSnapshot.key;
+            
+            animes.push(anime);
+            
+        });
+    }).catch(error => {
+        response.json({"data":{"error":`${error}`}});
+        return;
+    });
+
+    response.json({"data":{"ok":JSON.stringify(animes)}});
+    return;
+
 });
 
 exports.getAllAnime = functions.https.onRequest(async (request, response) => {
