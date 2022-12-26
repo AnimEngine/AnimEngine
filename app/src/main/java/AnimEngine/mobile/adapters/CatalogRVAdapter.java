@@ -4,10 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 
 import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.R;
+import AnimEngine.mobile.classes.Fan;
+import AnimEngine.mobile.classes.User;
 
 
 //import AnimEngine.mobile.utils.Anime;
@@ -27,10 +31,15 @@ public class CatalogRVAdapter extends RecyclerView.Adapter<CatalogRVAdapter.MyVi
     LayoutInflater layoutInflater;
     ArrayList<Anime> mAnimes;
 
-    public CatalogRVAdapter(Context mContext, LayoutInflater layoutInflater, ArrayList<Anime> mAnimes) {
+    boolean isCreator;
+    User user;
+
+    public CatalogRVAdapter(Context mContext, LayoutInflater layoutInflater, ArrayList<Anime> mAnimes, boolean isCreator, User user) {
         this.mContext = mContext;
         this.layoutInflater = layoutInflater;
         this.mAnimes = mAnimes;
+        this.isCreator = isCreator;
+        this.user = user;
     }
 
     @Override
@@ -50,25 +59,37 @@ public class CatalogRVAdapter extends RecyclerView.Adapter<CatalogRVAdapter.MyVi
 
     public void onBindViewHolder(@NonNull CatalogRVAdapter.MyViewHolder viewHolder, final int position) {
         Picasso.get().load((this.mAnimes.get(position)).getImageURL()).into(viewHolder.imageButton);
-        //Picasso.get().load((this.mAnimes.get(position)).getImageURL()).into(viewHolder.imageButton);
+
         viewHolder.textView.setText(mAnimes.get(position).getName());
         viewHolder.imageButton.setOnClickListener(v -> {
-//                final AlertDialog alertDialog = (new AlertDialog.Builder(mContext)).create();
-//                View view = layoutInflater.inflate(R.layout.dialog_manufacturers, null);
-//
-//                ((TextView)view.findViewById(R.id.TVManudialog_name)).setText((mManufacturers.get(position)).getName());
-//
-//                TextView textView = view.findViewById(R.id.TVManudialog_desc);
-//                textView.setText((mManufacturers.get(position)).getDescription().replace("_n", "\n"));
-//
-//                view.findViewById(R.id.ButtonManudialog_close).setOnClickListener(new View.OnClickListener() {
-//
-//                    public void onClick(View param2View) {
-//                        alertDialog.dismiss();
-//                    }
-//                });
-//                alertDialog.setView(view);
-//                alertDialog.show();
+                final AlertDialog alertDialog = (new AlertDialog.Builder(mContext)).create();
+                View view = layoutInflater.inflate(R.layout.dialog_anime_fan, null);
+
+                ((TextView)view.findViewById(R.id.text_view_title_dialog_anime)).setText((mAnimes.get(position)).getName());
+
+                TextView textView = view.findViewById(R.id.text_view_description_dialog);
+                textView.setText((mAnimes.get(position)).getDescription());
+
+                if(isCreator){
+                    view.findViewById(R.id.layout_add_comment_dialog).setVisibility(View.GONE);
+                }
+                else{
+                    TextView commenterName = view.findViewById(R.id.text_view_name_add_comment_dialog);
+                    Fan fan = ((Fan) user);
+                    commenterName.setText(String.format("%s %s",fan.getFName(), fan.getLName()));
+
+                    Button uploadComment = view.findViewById(R.id.button_send_comment_dialog);
+                    uploadComment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                }
+
+                view.findViewById(R.id.button_close_dialog).setOnClickListener(param2View -> alertDialog.dismiss());
+                alertDialog.setView(view);
+                alertDialog.show();
         });
     }
 

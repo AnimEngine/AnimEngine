@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -27,6 +28,7 @@ import AnimEngine.mobile.adapters.CatalogRVAdapter;
 import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.classes.Creator;
 import AnimEngine.mobile.classes.Fan;
+import AnimEngine.mobile.classes.User;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.DBAndStorageModel;
 
@@ -34,6 +36,7 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
 
     ArrayList<Anime> arrayList;
     RecyclerView rv;
+    CatalogRVAdapter customCatalogRVAdapter;
 
     DBAndStorageModel model;
     boolean isCreator;
@@ -41,8 +44,10 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
     UserAndToken creator;
     UserAndToken fan;
     Creator creatorObj;
-    ArrayList<Pair<String, String>> keyValuePairs;
     Fan fanObj;
+
+    ArrayList<Pair<String, String>> keyValuePairs;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,7 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
         model.getAllAnime();
 
         TextView tv_title = findViewById(R.id.catalog_tv);
-        rv = findViewById(R.id.catalog_recycler);
+
         //BottomNavigationView bottomNavigation = findViewById(R.id.catalog_bottom_navigation);
 
         BottomNavigationView bottomNavigationViewCreator = findViewById(R.id.bottom_navigation_creator_catalog);
@@ -70,9 +75,11 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
         bottomNavigationView.setOnItemSelectedListener(this);
 
         creator = (UserAndToken) getIntent().getSerializableExtra("creator");
+        User userToPass;
         if (creator != null) {
             isCreator = true;
             creatorObj = (Creator) creator.getUser();
+            userToPass = creatorObj;
 
             keyValuePairs.add(new Pair<>("Email: ", creatorObj.getEmail()));
             keyValuePairs.add(new Pair<>("Password: ", creatorObj.getPassword()));
@@ -85,6 +92,7 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
             fan = (UserAndToken) getIntent().getSerializableExtra( "fan");
             isCreator = false;
             fanObj = (Fan) fan.getUser();
+            userToPass = fanObj;
 
             keyValuePairs.add(new Pair<>("Email: ", fan.getUser().getEmail()));
             keyValuePairs.add(new Pair<>("Password: ", fan.getUser().getPassword()));
@@ -94,41 +102,12 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
             bottomNavigationView.setVisibility(View.VISIBLE);
         }
 
-
-//        arrayList.add(new Anime("Erased"));
-//        arrayList.add(new Anime("Another"));
-//        arrayList.add(new Anime("Dragon Ball"));
-//
-//        arrayList.add(new Anime("Dragon Ball"));
-//        arrayList.add(new Anime("Dragon Ball"));
-//        arrayList.add(new Anime("Dragon Ball"));
-//
-//        arrayList.add(new Anime("Dragon Ball"));
-//        arrayList.add(new Anime("Dragon Ball"));
-//        arrayList.add(new Anime("Dragon Ball"));
-//
-//        arrayList.add(new Anime("Dragon Ball"));
-//        arrayList.add(new Anime("Dragon Ball"));
-//        arrayList.add(new Anime("Dragon Ball"));
-//
-//        arrayList.add(new Anime("Dragon Ball"));
-//        arrayList.add(new Anime("Dragon Ball"));
-//        arrayList.add(new Anime("Dragon Ball"));
-//
-//        arrayList.add(new Anime("Dragon Ball"));
-//        arrayList.add(new Anime("Dragon Ball"));
-//        arrayList.add(new Anime("Dragon Ball"));
-//
-//        arrayList.add(new Anime("Dragon Ball"));
-//        arrayList.add(new Anime("Dragon Ball"));
-//        arrayList.add(new Anime("Dragon Ball"));
+        rv = findViewById(R.id.catalog_recycler);
 
 
-    }
-
-    public boolean showNavigationBar(Resources resources) {
-        int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
-        return id > 0 && resources.getBoolean(id);
+        customCatalogRVAdapter = new CatalogRVAdapter(CatalogActivity.this, getLayoutInflater(), arrayList, isCreator, userToPass);
+        rv.setAdapter(customCatalogRVAdapter);
+        rv.setLayoutManager(new GridLayoutManager(this,4));
     }
 
     @Override
@@ -141,9 +120,9 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
         if (result.startsWith("OK")) {
             arrayList.addAll(this.model.getGetAllAnimeResult());
 
-            CatalogRVAdapter customCatalogRVAdapter = new CatalogRVAdapter(CatalogActivity.this, getLayoutInflater(), arrayList);
-            rv.setAdapter(customCatalogRVAdapter);
-            rv.setLayoutManager(new GridLayoutManager(CatalogActivity.this, 4));
+
+            customCatalogRVAdapter.notifyDataSetChanged();
+
 
         } else {
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();

@@ -1,0 +1,52 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_add_comment_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/text_view_comments_title_dialog"
+    android:layout_marginTop="1dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_person" />
+
+            <TextView
+                android:id="@+id/text_view_name_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Regina Phalange" />
+        </LinearLayout>
+
+        <RatingBar
+            android:id="@+id/rating_comment"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:numStars="5"
+            android:rating="4"
+
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_view_body_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wow! this anime is amazing! im so satisfied with the endingoawdfghadghaero;ghajghasgkjashdgkjlasdhgkjasdbgjaldfkhgakjfgbafkjlgbaekjgabdfgkj;adbfgkj;aebgjk;agba;kj" />
+
+
+</LinearLayout>
