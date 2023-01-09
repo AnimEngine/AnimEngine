@@ -269,11 +269,12 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
     @Override
     public boolean onClose() {
         searchView.setQuery("", false);
-        searchView.clearFocus();
+
         arrayList.clear();
         arrayList.addAll(copyArraylist);
 
         catalogRVAdapter.notifyDataSetChanged();
+        searchView.clearFocus();
         return true;
     }
 }

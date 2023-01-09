@@ -48,11 +48,37 @@
             android:textSize="20dp" />
     </ScrollView>
 
+    <LinearLayout
+        android:id="@+id/layout_like_dislike_fan_catalog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/scroll_view_description_dialog"
+        android:layout_centerHorizontal="true"
+        >
+
+        <ImageButton
+            android:id="@+id/button_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_like_anime_unfilled"/>
+
+
+        <ImageButton
+            android:id="@+id/button_dislike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_dislike_anime_unfilled"
+            android:layout_marginLeft="10dp"/>
+
+    </LinearLayout>
+
+
     <TextView
         android:id="@+id/text_view_comments_title_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/scroll_view_description_dialog"
+        android:layout_below="@+id/layout_like_dislike_fan_catalog"
         android:layout_marginTop="-3dp"
         android:text="Comments"
         android:textAlignment="center"

@@ -39,6 +39,8 @@ public class CatalogRVAdapter extends RecyclerView.Adapter<CatalogRVAdapter.MyVi
 
     boolean isCreator;
     User user;
+    Boolean is_clicked_like;
+    Boolean is_clicked_dislike;
 
 
     public CatalogRVAdapter(Context mContext, LayoutInflater layoutInflater, ArrayList<Anime> mAnimes, boolean isCreator, User user) {
@@ -68,12 +70,58 @@ public class CatalogRVAdapter extends RecyclerView.Adapter<CatalogRVAdapter.MyVi
         Picasso.get().load((this.mAnimes.get(position)).getImageURL()).into(viewHolder.imageButton);
 
         viewHolder.textView.setText(mAnimes.get(position).getName());
+
         viewHolder.imageButton.setOnClickListener(v -> {
             final AlertDialog alertDialog = (new AlertDialog.Builder(mContext)).create();
             View view = layoutInflater.inflate(R.layout.dialog_anime_fan, null);
 
             ((TextView) view.findViewById(R.id.text_view_title_dialog_anime)).setText((mAnimes.get(position)).getName());
             EditText commentText = view.findViewById(R.id.text_edit_comment);
+
+            ImageButton like = view.findViewById(R.id.button_like);
+            is_clicked_like = false;
+
+            ImageButton dislike = view.findViewById(R.id.button_dislike);
+            is_clicked_dislike = false;
+
+            like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(is_clicked_like){
+                        like.setImageResource(R.drawable.icon_like_anime_unfilled);
+                        is_clicked_like = false;
+                    }
+                    else {
+                        if (is_clicked_dislike) {
+                            dislike.setImageResource(R.drawable.icon_dislike_anime_unfilled);
+                            is_clicked_dislike = false;
+                        }
+
+                        like.setImageResource(R.drawable.icon_like_anime_filled);
+                        is_clicked_like = true;
+                    }
+                }
+            });
+
+            dislike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(is_clicked_dislike){
+                        dislike.setImageResource(R.drawable.icon_dislike_anime_unfilled);
+                        is_clicked_dislike = false;
+                    }
+                    else {
+                        if (is_clicked_like) {
+                            like.setImageResource(R.drawable.icon_like_anime_unfilled);
+                            is_clicked_like = false;
+                        }
+
+                        dislike.setImageResource(R.drawable.icon_dislike_anime_filled);
+                        is_clicked_dislike = true;
+                    }
+                }
+            });
+
 
             TextView textView = view.findViewById(R.id.text_view_description_dialog);
             textView.setText((mAnimes.get(position)).getDescription());
