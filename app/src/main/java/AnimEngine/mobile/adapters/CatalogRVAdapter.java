@@ -25,6 +25,8 @@ import AnimEngine.mobile.R;
 import AnimEngine.mobile.classes.Comment;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.User;
+import AnimEngine.mobile.classes.UserAndToken;
+import AnimEngine.mobile.models.CreatorModel;
 import AnimEngine.mobile.models.FanModel;
 import AnimEngine.mobile.models.Model;
 
@@ -38,12 +40,18 @@ public class CatalogRVAdapter extends RecyclerView.Adapter<CatalogRVAdapter.MyVi
     ArrayList<Anime> mAnimes;
 
     boolean isCreator;
-    User user;
+    UserAndToken user;
     Boolean is_clicked_like;
     Boolean is_clicked_dislike;
+    TextView likes_text;
+    TextView dislikes_text;
 
+    CreatorModel model;
+    String token;
+    Anime animeObj;
+    Anime animeHolder;
 
-    public CatalogRVAdapter(Context mContext, LayoutInflater layoutInflater, ArrayList<Anime> mAnimes, boolean isCreator, User user) {
+    public CatalogRVAdapter(Context mContext, LayoutInflater layoutInflater, ArrayList<Anime> mAnimes, boolean isCreator, UserAndToken user) {
         this.mContext = mContext;
         this.layoutInflater = layoutInflater;
         this.mAnimes = mAnimes;
@@ -78,26 +86,64 @@ public class CatalogRVAdapter extends RecyclerView.Adapter<CatalogRVAdapter.MyVi
             ((TextView) view.findViewById(R.id.text_view_title_dialog_anime)).setText((mAnimes.get(position)).getName());
             EditText commentText = view.findViewById(R.id.text_edit_comment);
 
+            likes_text = view.findViewById(R.id.text_likes_anime);
+            dislikes_text = view.findViewById(R.id.text_dislikes_anime);
+
+
             ImageButton like = view.findViewById(R.id.button_like);
             is_clicked_like = false;
 
             ImageButton dislike = view.findViewById(R.id.button_dislike);
             is_clicked_dislike = false;
-
+            token = user.getToken();
+            model = new CreatorModel();
             like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(is_clicked_like){
                         like.setImageResource(R.drawable.icon_like_anime_unfilled);
+                        animeHolder = mAnimes.get(viewHolder.getBindingAdapterPosition());
+                        int currentLikes = animeHolder.getLikeCounter();
+                        int currentDisLikes = animeHolder.getDislikeCounter();
+
+                        currentLikes = currentLikes-1;
+                        animeObj = new Anime(currentLikes, currentDisLikes);
+                        animeObj.setName(animeHolder.getName());
+                        model.editAnime(animeObj, token);
+
+                        animeHolder.setLikeCounter(currentLikes);
+                        likes_text.setText(String.format("%d", currentLikes));
                         is_clicked_like = false;
                     }
                     else {
                         if (is_clicked_dislike) {
                             dislike.setImageResource(R.drawable.icon_dislike_anime_unfilled);
+                            animeHolder =  mAnimes.get(viewHolder.getBindingAdapterPosition());
+                            int currentLikes = animeHolder.getLikeCounter();
+                            int currentDislikes = animeHolder.getDislikeCounter();
+
+                            currentDislikes = currentDislikes-1;
+                            animeObj = new Anime(currentLikes, currentDislikes);
+                            animeObj.setName(animeHolder.getName());
+                            model.editAnime(animeObj, token);
+
+                            animeHolder.setDislikeCounter(currentDislikes);
+                            dislikes_text.setText(String.format("%d", currentDislikes));
                             is_clicked_dislike = false;
                         }
 
                         like.setImageResource(R.drawable.icon_like_anime_filled);
+                        animeHolder = mAnimes.get(viewHolder.getBindingAdapterPosition());
+                        int currentLikes = animeHolder.getLikeCounter();
+                        int currentDislikes = animeHolder.getDislikeCounter();
+
+                        currentLikes = currentLikes+1;
+                        animeObj = new Anime(currentLikes, currentDislikes);
+                        animeObj.setName(animeHolder.getName());
+                        model.editAnime(animeObj, token);
+
+                        animeHolder.setLikeCounter(currentLikes);
+                        likes_text.setText(String.format("%d", currentLikes));
                         is_clicked_like = true;
                     }
                 }
@@ -108,19 +154,51 @@ public class CatalogRVAdapter extends RecyclerView.Adapter<CatalogRVAdapter.MyVi
                 public void onClick(View v) {
                     if(is_clicked_dislike){
                         dislike.setImageResource(R.drawable.icon_dislike_anime_unfilled);
+                        animeHolder = mAnimes.get(viewHolder.getBindingAdapterPosition());
+                        int currentLikes = animeHolder.getLikeCounter();
+                        int currentDislikes = animeHolder.getDislikeCounter();
+
+                        currentDislikes = currentDislikes-1;
+                        animeObj = new Anime(currentLikes, currentDislikes);
+                        model.editAnime(animeObj, token);
+
+                        animeHolder.setDislikeCounter(currentDislikes);
+                        dislikes_text.setText(String.format("%d", currentDislikes));
                         is_clicked_dislike = false;
                     }
                     else {
                         if (is_clicked_like) {
                             like.setImageResource(R.drawable.icon_like_anime_unfilled);
+                            animeHolder = mAnimes.get(viewHolder.getBindingAdapterPosition());
+                            int currentLikes = animeHolder.getLikeCounter();
+                            int currentDislikes = animeHolder.getDislikeCounter();
+
+                            currentLikes = currentLikes-1;
+                            animeObj = new Anime(currentLikes, currentDislikes);
+                            model.editAnime(animeObj, token);
+
+                            animeHolder.setLikeCounter(currentLikes);
+                            likes_text.setText(String.format("%d", currentLikes));
                             is_clicked_like = false;
                         }
 
                         dislike.setImageResource(R.drawable.icon_dislike_anime_filled);
+                        animeHolder = mAnimes.get(viewHolder.getBindingAdapterPosition());
+                        int currentLikes = animeHolder.getLikeCounter();
+                        int currentDislikes = animeHolder.getDislikeCounter();
+
+                        currentDislikes = currentDislikes+1;
+                        animeObj = new Anime(currentLikes, currentDislikes);
+                        model.editAnime(animeObj, token);
+
+                        animeHolder.setDislikeCounter(currentDislikes);
+                        dislikes_text.setText(String.format("%d", currentDislikes));
                         is_clicked_dislike = true;
                     }
                 }
             });
+
+
 
 
             TextView textView = view.findViewById(R.id.text_view_description_dialog);
@@ -134,7 +212,7 @@ public class CatalogRVAdapter extends RecyclerView.Adapter<CatalogRVAdapter.MyVi
                 view.findViewById(R.id.layout_add_comment_dialog).setVisibility(View.GONE);
             } else {
                 TextView commenterName = view.findViewById(R.id.text_view_name_add_comment_dialog);
-                Fan fan = ((Fan) user);
+                Fan fan = ((Fan) user.getUser());
                 commenterName.setText(String.format("%s %s", fan.getFName(), fan.getLName()));
 
 

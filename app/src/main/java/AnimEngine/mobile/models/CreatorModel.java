@@ -16,8 +16,8 @@ import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.User;
 
 class AnimeAndToken{
-    String token;
-    Anime anime;
+    String Token;
+    Anime Anime;
 }
 
 class UserAndTokenAndType{
@@ -51,8 +51,8 @@ public class CreatorModel extends Model{
         Gson gson = new Gson();
         AnimeAndToken animeAndToken = new AnimeAndToken();
 
-        animeAndToken.token=token;
-        animeAndToken.anime=anime;
+        animeAndToken.Token =token;
+        animeAndToken.Anime =anime;
         //String animeJson = gson.toJson(anime, Anime.class);
 
         //String json = String.format("{\"Token\":\"%s\"}", token);
@@ -129,11 +129,11 @@ public class CreatorModel extends Model{
                 });
     }
 
-    public void EditAnime(Anime anime, String token) {
+    public void editAnime(Anime anime, String token) {
         Gson gson = new Gson();
         AnimeAndToken animeAndToken = new AnimeAndToken();
-        animeAndToken.token=token;
-        animeAndToken.anime=anime;
+        animeAndToken.Token =token;
+        animeAndToken.Anime =anime;
         String json = gson.toJson(animeAndToken, AnimeAndToken.class);
         Log.d("update_json_anime", json);
         this.mFunctions
@@ -159,7 +159,6 @@ public class CreatorModel extends Model{
                     setChanged();
                     notifyObservers();
                 });
-
     }
 
     public void getAllAnimeOfCreator(String token){

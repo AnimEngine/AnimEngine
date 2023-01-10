@@ -96,11 +96,11 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
         searchView.setOnCloseListener(this);
 
         creator = (UserAndToken) getIntent().getSerializableExtra("creator");
-        User toPass;
+        UserAndToken toPass;
         if (creator != null) {
             isCreator = true;
             creatorObj = (Creator) creator.getUser();
-            toPass = creatorObj;
+            toPass = creator;
 
             keyValuePairs.add(new Pair<>("Email: ", creatorObj.getEmail()));
             keyValuePairs.add(new Pair<>("Password: ", creatorObj.getPassword()));
@@ -113,7 +113,7 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
             fan = (UserAndToken) getIntent().getSerializableExtra( "fan");
             isCreator = false;
             fanObj = (Fan) fan.getUser();
-            toPass = fanObj;
+            toPass = fan;
 
             keyValuePairs.add(new Pair<>("Email: ", fan.getUser().getEmail()));
             keyValuePairs.add(new Pair<>("Password: ", fan.getUser().getPassword()));

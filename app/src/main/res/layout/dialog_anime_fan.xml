@@ -63,6 +63,12 @@
             android:layout_height="wrap_content"
             android:src="@drawable/icon_like_anime_unfilled"/>
 
+        <TextView
+            android:id="@+id/text_likes_anime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginTop="10dp"/>
 
         <ImageButton
             android:id="@+id/button_dislike"
@@ -70,6 +76,14 @@
             android:layout_height="wrap_content"
             android:src="@drawable/icon_dislike_anime_unfilled"
             android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:id="@+id/text_dislikes_anime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginTop="10dp"/>
+
 
     </LinearLayout>
 

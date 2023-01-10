@@ -100,7 +100,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             animeRecyclerView = findViewById(R.id.recycler_profile_creator_anime);
             animeRecyclerView.setVisibility(View.VISIBLE);
 
-            customCatalogRVAdapter = new CatalogRVAdapter(this, getLayoutInflater(), animeList, true, creatorObj);
+            customCatalogRVAdapter = new CatalogRVAdapter(this, getLayoutInflater(), animeList, true, creator);
             animeRecyclerView.setAdapter(customCatalogRVAdapter);
             animeRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
 
@@ -139,9 +139,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Toast.makeText(getApplicationContext(), "Password has to be at least 6 characters long!", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-
-
 
                 String field1 = adapter.getmFields().get(2).second;
                 String field2 = adapter.getmFields().get(3).second;

@@ -9,11 +9,22 @@ public class Anime {
     private String imageURL;
     private HashMap<String, Float> genres;
     private String ownerUID;
-
+    private int likeCounter = 0;
+    private int dislikeCounter = 0;
 
 
     public Anime(String name){
 
+    }
+
+    public Anime(int likes, int dislikes){
+        name=null;
+        description=null;
+        imageURL=null;
+        genres=null;
+        ownerUID=null;
+        likeCounter=likes;
+        dislikeCounter=dislikes;
     }
 
     public Anime(String name, String description, String imageURL, HashMap<String, Float> genres, String ownerUID) {
@@ -62,5 +73,21 @@ public class Anime {
 
     public void setOwnerUID(String ownerUID) {
         this.ownerUID = ownerUID;
+    }
+
+    public int getLikeCounter() {
+        return likeCounter;
+    }
+
+    public void setLikeCounter(int likeCounter) {
+        this.likeCounter = likeCounter;
+    }
+
+    public int getDislikeCounter() {
+        return dislikeCounter;
+    }
+
+    public void setDislikeCounter(int dislikeCounter) {
+        this.dislikeCounter = dislikeCounter;
     }
 }
