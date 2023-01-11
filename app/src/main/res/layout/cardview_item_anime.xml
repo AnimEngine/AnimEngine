@@ -12,14 +12,10 @@
     <ImageButton
         android:id="@+id/IBcardview_anime"
         android:background="@android:color/transparent"
-
-
         android:layout_width="130dp"
         android:layout_height="wrap_content"
-
         android:scaleType="fitStart"
         android:adjustViewBounds="true"
-
         android:src="@drawable/erased"
 
         />
@@ -38,7 +34,3 @@
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
-
-
-    <!--    android:layout_marginLeft="10dp"-->
-    <!--    android:layout_marginBottom="30dp"-->

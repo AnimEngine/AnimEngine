@@ -38,14 +38,12 @@
     <ImageView
         android:id="@+id/image_create"
         android:layout_width="145dp"
-
         android:layout_height="200dp"
         android:layout_below="@+id/text_title_create"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@id/text_input_anime_name"
         android:adjustViewBounds="true"
-
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/erased"
