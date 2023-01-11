@@ -333,6 +333,66 @@ exports.editUser = functions.https.onRequest(async (request, response) => {
         });
 });
 
+exports.editAnime = functions.https.onRequest(async (request, response) => {
+    const json = request.body["data"];
+    userObj = JSON.parse(json);
+
+    const token = userObj["Token"];
+    console.log(token);
+
+    const anime = userObj["Anime"];
+    
+ 
+    const animeName = anime["name"]
+
+    var uid = await getUIDUsingToken(token).catch(error => {
+        console.log(error);
+        response.json({"data":{"error":`${error}`}});
+        return;
+    });
+    var currAnime;
+    await animeRef.child(animeName).get().then((dataSnapshot) => {
+        currAnime = dataSnapshot.val()
+    })
+    .catch(error => {
+        response.json({"data":{"error":`${error}`}});
+        console.log(error);
+        return;
+    });
+    console.log(currAnime);
+    for (const [key, value] of Object.entries(anime)) {
+        if (value != null && currAnime.hasOwnProperty(key)){
+            currAnime[key] = value;
+        }
+    }
+    if(!currAnime.hasOwnProperty('likeCounter'))
+        currAnime['likeCounter']=0
+    
+    if(!currAnime.hasOwnProperty('dislikeCounter'))
+        currAnime['dislikeCounter']=0
+
+    console.log(currAnime);
+
+    animeRef.child(animeName).set(currAnime).then(obj => {
+        response.json({"ok":'1'});
+    })
+    .catch(error => {
+        response.json({"data":{"error":`${error}`}});
+        console.log(error);
+        return;
+    });
+
+/*
+    private String name;
+    private String description;
+    private String imageURL;
+    private HashMap<String, Float> genres;
+    private String ownerUID;
+    private int likeCounter = 0;
+    private int dislikeCounter = 0;
+*/
+});
+
 exports.editGenres = functions.https.onRequest(async (request, response) => {
     const json = request.body["data"];
     userObj = JSON.parse(json);
@@ -557,6 +617,44 @@ exports.getBestKAnime = functions.https.onRequest(async (request, response) => {
     // });
 });
   
+exports.getAllComments = functions.https.onRequest(async (request, response) => {K
+    const fans = await fanRef.get().catch(error => {
+        response.json({"data":{"error":`${error}`}});
+        return;
+    });
+
+    var comments = {}
+
+
+
+
+    await commentRef.once('value').then((snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+            var commentList = []
+
+            var commentsForAnime = childSnapshot.val();
+            var map = new Map(Object.entries(commentsForAnime));
+            var animeName =childSnapshot.key;
+            for (let [key, value] of map) {
+                var currentComment = value;
+                currentComment["authorName"] = `${fans[key].fName} ${fans[key].lName}`;
+                
+                commentList.push(currentComment);
+            }
+
+
+            comments[animeName] = commentList;
+        }
+        );
+    }).catch(error => {
+        response.json({"data":{"error":`${error}`}});
+        return;
+    });
+
+    response.json({"data":{"ok":JSON.stringify(comments)}});
+    return;
+});
+
 exports.uploadComment =functions.https.onRequest(async (request, response) => {
     /*
     {
@@ -609,40 +707,3 @@ exports.uploadComment =functions.https.onRequest(async (request, response) => {
 
 });
 
-exports.getAllComments = functions.https.onRequest(async (request, response) => {
-    const fans = await fanRef.get().catch(error => {
-        response.json({"data":{"error":`${error}`}});
-        return;
-    });
-
-    var comments = {}
-
-
-
-
-    await commentRef.once('value').then((snapshot) => {
-        snapshot.forEach((childSnapshot) => {
-            var commentList = []
-
-            var commentsForAnime = childSnapshot.val();
-            var map = new Map(Object.entries(commentsForAnime));
-            var animeName =childSnapshot.key;
-            for (let [key, value] of map) {
-                var currentComment = value;
-                currentComment["authorName"] = `${fans[key].fName} ${fans[key].lName}`;
-                
-                commentList.push(currentComment);
-            }
-
-
-            comments[animeName] = commentList;
-        }
-        );
-    }).catch(error => {
-        response.json({"data":{"error":`${error}`}});
-        return;
-    });
-
-    response.json({"data":{"ok":JSON.stringify(comments)}});
-    return;
-});
