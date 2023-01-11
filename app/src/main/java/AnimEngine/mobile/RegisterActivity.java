@@ -179,7 +179,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             if(isCreator)
                 user = new Creator(email, password, "creator", studioName, website);
             else
-                user = new Fan(email, password, "fan", fName, lName, new String[0], createGenresHashMap());
+                user = new Fan(email, password, "fan", fName, lName, createGenresHashMap());
 
             this.model.register(user);
 

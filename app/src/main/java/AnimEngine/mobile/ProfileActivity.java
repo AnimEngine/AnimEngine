@@ -158,7 +158,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 model.editUser(creator.getToken(), "creator", newCreator);
 
             }else{
-                Fan newFan = new Fan(email, password, "fan", field1, field2, fanObj.getBlacklist(), fanObj.getGenres());
+                Fan newFan = new Fan(email, password, "fan", field1, field2, fanObj.getGenres());
                 model.editUser(fan.getToken(), "fan", newFan);
             }
 
