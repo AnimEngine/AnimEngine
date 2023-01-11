@@ -32,18 +32,22 @@ import AnimEngine.mobile.util.ModelLocator;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, Observer {
 
+    // model
     ModelLocator modelLocator;
     UserModel model;
+
+    // user classes
     UserAndToken creator;
     UserAndToken fan;
 
+    // view & controls
     EditText editTextEmail, editTextPassword, editTextCheckMail, editTextCheckPassword;
-
+    Button submit;
+    TextView pleaseWait;
 
     BottomSheetDialog bsd;
     ProgressBar progressBar;
-    Button submit;
-    TextView pleaseWait;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,10 +78,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         TextInputLayout pi = findViewById(R.id.text_input_password_login);
         editTextPassword = pi.getEditText();
 
-
         progressBar = findViewById(R.id.progress_login);
         submit = findViewById(R.id.button_login);
         pleaseWait = findViewById(R.id.text_message_please_wait);
+
         stopLoadingAnimation();
 
 
@@ -85,17 +89,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void startLoadingAnimation(){
         progressBar.setVisibility(View.VISIBLE);
+
         submit.setClickable(false);
         submit.setEnabled(false);
         submit.setVisibility(View.GONE);
+
         pleaseWait.setVisibility(View.VISIBLE);
     }
 
     public void stopLoadingAnimation(){
         progressBar.setVisibility(View.GONE);
+
         submit.setClickable(true);
         submit.setEnabled(true);
         submit.setVisibility(View.VISIBLE);
+
         pleaseWait.setVisibility(View.GONE);
     }
 
@@ -120,30 +128,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             CheckEmail emailChecker = new CheckEmail();
 
+            submit.setOnClickListener(view1 -> {
+                String email = editTextCheckMail.getText().toString();
+                String password = editTextCheckPassword.getText().toString();
 
-
-
-
-            submit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String email = editTextCheckMail.getText().toString();
-                    String password = editTextCheckPassword.getText().toString();
-
-                    if(!emailChecker.isValidEmail(email)) {
-                        Toast.makeText(getApplicationContext(), "Invalid Email!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if(password.length()<6) {
-                        Toast.makeText(getApplicationContext(), "Password has to be at least 6 characters long!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    model.forgot(email, password);
-                    assert progressBar != null;
-                    progressBar.setVisibility(View.VISIBLE);
-
+                if(!emailChecker.isValidEmail(email)) {
+                    Toast.makeText(getApplicationContext(), "Invalid Email!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                if(password.length()<6) {
+                    Toast.makeText(getApplicationContext(), "Password has to be at least 6 characters long!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                model.forgot(email, password);
+
+                assert progressBar != null;
+                progressBar.setVisibility(View.VISIBLE);
+
             });
 
 
@@ -160,6 +162,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             String password = editTextPassword.getText().toString();
             this.model.login(email, password);
+
             startLoadingAnimation();
         }
 
@@ -184,37 +187,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             switch (this.model.getAction()){
                 case UserModel.LOGIN:
                     Toast.makeText(getApplicationContext(), "Logged in Successfully!", Toast.LENGTH_SHORT).show();
-                    if(fan.getUser() != null){
-                        //fan connection
-                        Intent intent = new Intent(this, EngineActivity.class);
-                        intent.putExtra("fan",fan);
-                        startActivity(intent);
-                        finish();
+                    Intent intent;
 
-                        return;
-                    }
-                    else if (creator.getUser() != null){
-                        Intent intent = new Intent(this, CreateActivity.class);
+                    intent = new Intent(this, EngineActivity.class);
+                    intent.putExtra("fan",fan);
+
+                    if (creator.getUser() != null){
+                        intent = new Intent(this, CreateActivity.class);
                         intent.putExtra("creator",creator);
-                        startActivity(intent);
-                        finish();
+                    }
 
-                        return;
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), "WAT???!", Toast.LENGTH_SHORT).show();
-                    }
+                    startActivity(intent);
+                    finish();
+
+                    return;
+
                 case UserModel.FORGOT:
                     Toast.makeText(getApplicationContext(), "Password updated Successfully!", Toast.LENGTH_SHORT).show();
                     bsd.cancel();
                     break;
             }
-
-//            Intent intent = new Intent(this, LoginActivity.class);
-//            startActivity(intent);
-//            finish();
         }else{
-
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
             switch (this.model.getAction()){
                 case UserModel.LOGIN:
