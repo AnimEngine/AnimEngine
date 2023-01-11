@@ -33,32 +33,6 @@
         android:layout_centerHorizontal="true"
         >
 
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:id="@+id/text_edit_search_engine"-->
-<!--            android:layout_width="300dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:hint="Search anime"-->
-<!--            android:layout_below="@+id/catalog_tv"-->
-<!--            app:startIconDrawable="@drawable/icon_search_client"-->
-<!--            android:visibility="gone"-->
-<!--            >-->
-
-<!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:textSize="12sp"-->
-<!--                android:inputType="textEmailAddress" />-->
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--        <Button-->
-<!--            android:id="@+id/button_search_anime"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:text="search"-->
-<!--            android:visibility="gone"-->
-<!--            />-->
-
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -69,9 +43,6 @@
         android:layout_below="@+id/text_edit_search"
 
         />
-
-
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_creator_catalog"

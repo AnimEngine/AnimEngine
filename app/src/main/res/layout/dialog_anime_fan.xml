@@ -71,11 +71,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="horizontal">-->
-
                 <ImageView
                     android:id="@+id/image_user_dialog"
                     android:layout_width="wrap_content"
@@ -89,8 +84,6 @@
                     android:layout_toRightOf="@+id/image_user_dialog"
                     android:gravity="center_vertical"
                     android:text="Regina Phalange" />
-<!--            </LinearLayout>-->
-
                 <RatingBar
                     android:id="@+id/rating_commend_add_dialog"
                     style="?android:attr/ratingBarStyleSmall"
