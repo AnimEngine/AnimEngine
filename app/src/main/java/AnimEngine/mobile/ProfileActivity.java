@@ -43,11 +43,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     UserAndToken creator;
     Creator creatorObj;
 
-    ModelLocator modelLocator;
-    CreatorModel model;
-
     UserAndToken fan;
     Fan fanObj;
+
+    ModelLocator modelLocator;
+    CreatorModel model;
 
     ArrayList<Anime> animeList;
     RecyclerView animeRecyclerView;
@@ -158,8 +158,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 model.editUser(creator.getToken(), "creator", newCreator);
 
             }else{
-                Fan newFan = new Fan(email, password, "fan", field1, field2, fanObj.getGenres());
-                model.editUser(fan.getToken(), "fan", newFan);
+                fanObj.setFName(field1);
+                fanObj.setLName(field2);
+
+                model.editUser(fan.getToken(), "fan", fanObj);
             }
 
 
@@ -228,8 +230,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     }
-
-
 
     @Override
     public void update(Observable o, Object arg) {

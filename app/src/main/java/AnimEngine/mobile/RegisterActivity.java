@@ -30,8 +30,6 @@ import AnimEngine.mobile.adapters.SectionsPagerAdapter;
 import AnimEngine.mobile.classes.Creator;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.User;
-import AnimEngine.mobile.models.DBAndStorageModel;
-import AnimEngine.mobile.models.FanModel;
 import AnimEngine.mobile.models.UserModel;
 import AnimEngine.mobile.util.CheckEmail;
 import AnimEngine.mobile.util.InitialContext;
@@ -39,21 +37,26 @@ import AnimEngine.mobile.util.ModelLocator;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, Observer {
 
+    // model
     ModelLocator modelLocator;
     UserModel model;
 
     HashMap<String, EditText> creatorEditTexts = new HashMap<>();
     HashMap<String, EditText> fanEditTexts = new HashMap<>();
 
+    // creator/fan slide views
     ViewPager2 myViewPager2;
     SectionsPagerAdapter myAdapter;
+    private static final int[] TAB_TITLES = new int[]{R.string.register_creator_fragment_label, R.string.register_fan_fragment_label};
 
     Fragment creatorFragment, fanFragment;
 
+    // loading animation
     ProgressBar progressBar;
     Button submit;
     TextView pleaseWait;
-    private static final int[] TAB_TITLES = new int[]{R.string.register_creator_fragment_label, R.string.register_fan_fragment_label};
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,17 +103,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     public void startLoadingAnimation(){
         progressBar.setVisibility(View.VISIBLE);
+
         submit.setClickable(false);
         submit.setEnabled(false);
         submit.setVisibility(View.GONE);
+
         pleaseWait.setVisibility(View.VISIBLE);
     }
 
     public void stopLoadingAnimation(){
         progressBar.setVisibility(View.GONE);
+
         submit.setClickable(true);
         submit.setEnabled(true);
         submit.setVisibility(View.VISIBLE);
+
         pleaseWait.setVisibility(View.GONE);
     }
 
@@ -188,6 +195,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private HashMap<String, Float> createGenresHashMap(){
+        /*
+        read json from assets and load into genre objects
+         */
         HashMap<String, Float> ret = new HashMap<>();
         String genresJson="";
         try {
