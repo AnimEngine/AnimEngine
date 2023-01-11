@@ -111,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             animeRecyclerView = findViewById(R.id.recycler_profile_creator_anime);
             animeRecyclerView.setVisibility(View.VISIBLE);
 
-            customCatalogRVAdapter = new CatalogRVAdapter(this, getLayoutInflater(), animeList, true, creatorObj);
+            customCatalogRVAdapter = new CatalogRVAdapter(this, getLayoutInflater(), animeList, true, creator);
             animeRecyclerView.setAdapter(customCatalogRVAdapter);
             animeRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
 
@@ -146,14 +146,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             String email = adapter.getmFields().get(0).second;
             String password = adapter.getmFields().get(1).second;
 
-
-
+            if(password.length()<6) {
+                Toast.makeText(getApplicationContext(), "Password has to be at least 6 characters long!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
                 String field1 = adapter.getmFields().get(2).second;
                 String field2 = adapter.getmFields().get(3).second;
             if(isCreator) {
                 Creator newCreator = new Creator(email, password, "creator", field1, field2);
                 model.editUser(creator.getToken(), "creator", newCreator);
+
             }else{
                 Fan newFan = new Fan(email, password, "fan", field1, field2, fanObj.getBlacklist(), fanObj.getGenres());
                 model.editUser(fan.getToken(), "fan", newFan);
