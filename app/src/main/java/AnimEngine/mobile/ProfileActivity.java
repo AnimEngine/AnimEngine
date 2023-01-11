@@ -32,6 +32,10 @@ import AnimEngine.mobile.classes.Creator;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.CreatorModel;
+import AnimEngine.mobile.models.DBAndStorageModel;
+import AnimEngine.mobile.models.FanModel;
+import AnimEngine.mobile.util.InitialContext;
+import AnimEngine.mobile.util.ModelLocator;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener, Observer {
 
@@ -39,6 +43,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     UserAndToken creator;
     Creator creatorObj;
 
+    ModelLocator modelLocator;
     CreatorModel model;
 
     UserAndToken fan;
@@ -83,7 +88,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         keyValuePairs = new ArrayList<>();
         animeList = new ArrayList<>();
 
-        model = new CreatorModel();
+        modelLocator = ((MyApplication)getApplication()).getModelLocator();
+
+        try {
+            model = (CreatorModel) modelLocator.getModel(InitialContext.CREATOR, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         model.addObserver(this);
 
         creator = (UserAndToken) getIntent().getSerializableExtra("creator");
@@ -100,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             animeRecyclerView = findViewById(R.id.recycler_profile_creator_anime);
             animeRecyclerView.setVisibility(View.VISIBLE);
 
-            customCatalogRVAdapter = new CatalogRVAdapter(this, getLayoutInflater(), animeList, true, creatorObj);
+            customCatalogRVAdapter = new CatalogRVAdapter(this, getLayoutInflater(), animeList, true, creator);
             animeRecyclerView.setAdapter(customCatalogRVAdapter);
             animeRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
 
@@ -135,16 +146,19 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             String email = adapter.getmFields().get(0).second;
             String password = adapter.getmFields().get(1).second;
 
-
-
+            if(password.length()<6) {
+                Toast.makeText(getApplicationContext(), "Password has to be at least 6 characters long!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
                 String field1 = adapter.getmFields().get(2).second;
                 String field2 = adapter.getmFields().get(3).second;
             if(isCreator) {
                 Creator newCreator = new Creator(email, password, "creator", field1, field2);
                 model.editUser(creator.getToken(), "creator", newCreator);
+
             }else{
-                Fan newFan = new Fan(email, password, "fan", field1, field2, fanObj.getBlacklist(), fanObj.getGenres());
+                Fan newFan = new Fan(email, password, "fan", field1, field2, fanObj.getGenres());
                 model.editUser(fan.getToken(), "fan", newFan);
             }
 

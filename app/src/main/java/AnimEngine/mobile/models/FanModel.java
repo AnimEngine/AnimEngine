@@ -11,6 +11,7 @@ import java.util.List;
 
 import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.classes.Comment;
+import AnimEngine.mobile.classes.Fan;
 
 public class FanModel extends Model{
 
@@ -50,5 +51,34 @@ public class FanModel extends Model{
                     setChanged();
                     notifyObservers();
                 });
+    }
+    public void editFan(Fan fan, String token){
+        Gson gson = new Gson();
+        String json = String.format("{\"Token\":\"%s\", \"Type\": \"fan\", \"User\":%s}",token,gson.toJson(fan, Fan.class));
+        Log.d("json_editFan",json);
+
+        this.mFunctions
+                .getHttpsCallable("editUser")
+                .call(json).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        HashMap map = (HashMap) task.getResult().getData();
+                        if (map == null) {
+                            result = "ERROR";
+                        } else {
+                            if (map.containsKey("ok")) {
+                                result = "OK";
+                            } else {
+                                result = "ERROR:" + map.get("error");
+                            }
+                        }
+                    }
+                    else{
+                        result = "ERROR";
+                    }
+                    setChanged();
+                    notifyObservers();
+                });
+
+
     }
 }

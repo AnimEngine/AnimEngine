@@ -14,16 +14,12 @@ import AnimEngine.mobile.classes.User;
 import AnimEngine.mobile.classes.UserAndToken;
 public class UserModel extends Model{
 
-    private String action = NONE;
-
     private final UserAndToken creator;
     private final UserAndToken fan;
 
     public static final String REGISTER = "REGISTER";
     public static final String LOGIN = "LOGIN";
     public static final String FORGOT = "FORGOT";
-
-    public static final String NONE = "NONE";
 
     public UserModel(UserAndToken creator, UserAndToken fan){
         this.creator=creator;

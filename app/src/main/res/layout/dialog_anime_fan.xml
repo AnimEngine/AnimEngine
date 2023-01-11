@@ -18,6 +18,19 @@
         android:textStyle="bold" />
 
     <ImageButton
+        android:id="@+id/button_edit_anime_information"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_edit_information_edit_anime"
+        android:tooltipText="Edit information"
+
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:visibility="gone"
+        />
+
+    <ImageButton
         android:id="@+id/button_close_dialog"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -48,11 +61,51 @@
             android:textSize="20dp" />
     </ScrollView>
 
+    <LinearLayout
+        android:id="@+id/layout_like_dislike_fan_catalog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/scroll_view_description_dialog"
+        android:layout_centerHorizontal="true"
+        >
+
+        <ImageButton
+            android:id="@+id/button_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_like_anime_unfilled"/>
+
+        <TextView
+            android:id="@+id/text_likes_anime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginTop="10dp"/>
+
+        <ImageButton
+            android:id="@+id/button_dislike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_dislike_anime_unfilled"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:id="@+id/text_dislikes_anime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginTop="10dp"/>
+
+
+    </LinearLayout>
+
+
     <TextView
         android:id="@+id/text_view_comments_title_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/scroll_view_description_dialog"
+        android:layout_below="@+id/layout_like_dislike_fan_catalog"
         android:layout_marginTop="-3dp"
         android:text="Comments"
         android:textAlignment="center"

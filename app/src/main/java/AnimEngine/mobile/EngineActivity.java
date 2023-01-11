@@ -17,13 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,12 +35,13 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import AnimEngine.mobile.classes.Anime;
-import AnimEngine.mobile.classes.Comment;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.DBAndStorageModel;
 import AnimEngine.mobile.models.FanModel;
 import AnimEngine.mobile.models.Model;
+import AnimEngine.mobile.util.InitialContext;
+import AnimEngine.mobile.util.ModelLocator;
 import AnimEngine.mobile.util.RunnableWithStatus;
 
 public class EngineActivity extends AppCompatActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener, Observer {
@@ -51,6 +52,7 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
     UserAndToken fan;
     Fan fanObj;
 
+    ModelLocator modelLocator;
     DBAndStorageModel DBModel;
     FanModel fanModel;
 
@@ -62,6 +64,10 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
     EditText content;
     RatingBar stars;
 
+    HashMap<String, String> blacklist = new HashMap<>();
+    HashMap<String, String> whitelist = new HashMap<>();
+    Anime currentAnime = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +76,15 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         textViewAnimeName = findViewById(R.id.text_view_anime_name_engine);
         imageViewAnimeImage = findViewById(R.id.image_anime_engine);
 
-        DBModel = new DBAndStorageModel();
-        fanModel = new FanModel();
+        modelLocator = ((MyApplication)getApplication()).getModelLocator();
+
+        try {
+            DBModel = (DBAndStorageModel) modelLocator.getModel(InitialContext.DBSTORAGE, null);
+            fanModel = (FanModel)  modelLocator.getModel(InitialContext.FAN, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         DBModel.addObserver(this);
         fanModel.addObserver(this);
 
@@ -99,9 +112,10 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
     private void displayNextAnime(){
         if(animeQueue.isEmpty()){
             Toast.makeText(getApplicationContext(),"No more anime's left to recommend!",Toast.LENGTH_SHORT).show();
+            currentAnime = null;
         }
         else{
-            Anime currentAnime = animeQueue.poll();
+            currentAnime = animeQueue.poll();
 
             if(animeImageTasksQueue.poll().isFinished()) {
                 Bitmap currentImage = Objects.requireNonNull(animeImageTasks.get(currentAnime.getName()).getRet());
@@ -125,6 +139,7 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
         textViewAnimeName.setText(anime.getName());
+        currentAnime = anime;
     }
 
     @Override
@@ -156,11 +171,11 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         if(view == findViewById(R.id.button_not_watch_later_anime)){
+            blacklist.put(currentAnime.getName(), currentAnime.getName());
             displayNextAnime();
         }
 
         if(view == findViewById(R.id.button_add_comment)){
-
 //            TextInputLayout contentInput = findViewById(R.id.button_send_comment);
 //            content = contentInput.getEditText();
 //            assert content != null;
@@ -169,37 +184,42 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
 //            float ratingValue =  stars.getRating();
 //
 //            fanModel.uploadComment(new Comment("Another", content.getText().toString(), ratingValue, fan.getToken()));
+        }
 
-
-
+        if(view == findViewById(R.id.button_watch_later_anime)){
+            whitelist.put(currentAnime.getName(),currentAnime.getName());
+            displayNextAnime();
         }
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if(fanObj.getWhitelist() != null)
+            whitelist.putAll(fanObj.getWhitelist());
+
+        if(fanObj.getBlacklist() != null)
+            blacklist.putAll(fanObj.getBlacklist());
+
+        fanObj.setWhitelist(whitelist);
+        fanObj.setBlacklist(blacklist);
+
+        fanModel.editFan(fanObj, fan.getToken());
+
         Intent intent;
         int curr = item.getItemId();
 
-        if (R.id.profile_page == curr) {
-            intent = new Intent(this, ProfileActivity.class);
-            intent.putExtra("fan", fan);
-            startActivity(intent);
-            finish();
+        intent = new Intent(this, ProfileActivity.class);
 
-            return true;
-        }
 
         if (R.id.catalog_page == curr) {
             intent = new Intent(this, CatalogActivity.class);
-            intent.putExtra("fan", fan);
-            startActivity(intent);
-            finish();
-
-            return true;
         }
 
+        intent.putExtra("fan", fan);
+        startActivity(intent);
+        finish();
 
-        return false;
+        return true;
     }
 
     @Override

@@ -4,14 +4,16 @@ import java.util.HashMap;
 
 public class Fan extends User{
     private String fName, lName;
-    private String[] blacklist;
+    private HashMap<String, String> blacklist;
+    private HashMap<String, String> whitelist;
     private HashMap<String, Float> genres;
 
-    public Fan(String email, String password, String type, String fName, String lName, String[] blacklist, HashMap<String, Float> genres) {
+    public Fan(String email, String password, String type, String fName, String lName, HashMap<String, Float> genres) {
         super(email, password, type);
         this.fName = fName;
         this.lName = lName;
-        this.blacklist = blacklist;
+        this.blacklist = null;
+        this.whitelist = null;
         this.genres = genres;
     }
 
@@ -31,12 +33,20 @@ public class Fan extends User{
         this.lName = lName;
     }
 
-    public String[] getBlacklist() {
+    public HashMap<String, String> getBlacklist() {
         return blacklist;
     }
 
-    public void setBlacklist(String[] blacklist) {
+    public void setBlacklist(HashMap<String, String> blacklist) {
         this.blacklist = blacklist;
+    }
+
+    public HashMap<String, String> getWhitelist() {
+        return whitelist;
+    }
+
+    public void setWhitelist(HashMap<String, String> whitelist) {
+        this.whitelist = whitelist;
     }
 
     public HashMap<String, Float> getGenres() {

@@ -38,6 +38,8 @@ import AnimEngine.mobile.classes.User;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.DBAndStorageModel;
 import AnimEngine.mobile.models.FanModel;
+import AnimEngine.mobile.util.InitialContext;
+import AnimEngine.mobile.util.ModelLocator;
 
 public class CatalogActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener, Observer {
 
@@ -49,6 +51,7 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
     RecyclerView rv;
     CatalogRVAdapter catalogRVAdapter;
 
+    ModelLocator modelLocator;
     DBAndStorageModel model;
     boolean isCreator;
 
@@ -73,7 +76,13 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
 
         keyValuePairs = new ArrayList<>();
 
-        model = new DBAndStorageModel();
+        modelLocator = ((MyApplication)getApplication()).getModelLocator();
+
+        try {
+            model = (DBAndStorageModel) modelLocator.getModel(InitialContext.DBSTORAGE, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         model.addObserver(this);
         model.getAllAnime();
 
@@ -96,11 +105,11 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
         searchView.setOnCloseListener(this);
 
         creator = (UserAndToken) getIntent().getSerializableExtra("creator");
-        User toPass;
+        UserAndToken toPass;
         if (creator != null) {
             isCreator = true;
             creatorObj = (Creator) creator.getUser();
-            toPass = creatorObj;
+            toPass = creator;
 
             keyValuePairs.add(new Pair<>("Email: ", creatorObj.getEmail()));
             keyValuePairs.add(new Pair<>("Password: ", creatorObj.getPassword()));
@@ -113,7 +122,7 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
             fan = (UserAndToken) getIntent().getSerializableExtra( "fan");
             isCreator = false;
             fanObj = (Fan) fan.getUser();
-            toPass = fanObj;
+            toPass = fan;
 
             keyValuePairs.add(new Pair<>("Email: ", fan.getUser().getEmail()));
             keyValuePairs.add(new Pair<>("Password: ", fan.getUser().getPassword()));
@@ -269,11 +278,12 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
     @Override
     public boolean onClose() {
         searchView.setQuery("", false);
-        searchView.clearFocus();
+
         arrayList.clear();
         arrayList.addAll(copyArraylist);
 
         catalogRVAdapter.notifyDataSetChanged();
+        searchView.clearFocus();
         return true;
     }
 }
