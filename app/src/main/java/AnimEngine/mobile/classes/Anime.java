@@ -9,13 +9,8 @@ public class Anime {
     private String imageURL;
     private HashMap<String, Float> genres;
     private String ownerUID;
-    private int likeCounter = 0;
-    private int dislikeCounter = 0;
-
-
-    public Anime(String name){
-
-    }
+    private Integer likeCounter = 0;
+    private Integer dislikeCounter = 0;
 
     public Anime(int likes, int dislikes){
         name=null;
@@ -25,6 +20,16 @@ public class Anime {
         ownerUID=null;
         likeCounter=likes;
         dislikeCounter=dislikes;
+    }
+
+    public Anime(String description){
+        name=null;
+        this.description=description;
+        imageURL=null;
+        genres=null;
+        ownerUID=null;
+        likeCounter=null;
+        dislikeCounter=null;
     }
 
     public Anime(String name, String description, String imageURL, HashMap<String, Float> genres, String ownerUID) {
