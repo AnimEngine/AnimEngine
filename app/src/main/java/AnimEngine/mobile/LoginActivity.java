@@ -2,6 +2,8 @@ package AnimEngine.mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Pair;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,9 @@ import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
@@ -21,9 +26,13 @@ import java.util.Observer;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.UserModel;
 import AnimEngine.mobile.util.CheckEmail;
+import AnimEngine.mobile.util.InitialContext;
+import AnimEngine.mobile.util.ModelLocator;
+
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, Observer {
 
+    ModelLocator modelLocator;
     UserModel model;
     UserAndToken creator;
     UserAndToken fan;
@@ -43,7 +52,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         this.creator = new UserAndToken();
         this.fan = new UserAndToken();
 
-        model = new UserModel(creator, fan);
+        modelLocator = ((MyApplication)getApplication()).getModelLocator();
+        List<Pair<String, Object>> args = new ArrayList<>();
+        args.add(new Pair<>("creator", creator));
+        args.add(new Pair<>("fan", fan));
+        try {
+            model = (UserModel) modelLocator.getModel(InitialContext.USER, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         model.addObserver(this);
 
         findViewById(R.id.text_link_forgot_password).setOnClickListener(this);

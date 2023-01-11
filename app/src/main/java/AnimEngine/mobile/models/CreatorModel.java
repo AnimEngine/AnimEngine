@@ -47,6 +47,10 @@ public class CreatorModel extends Model{
     public static final String EDIT_USER = "EDIT_USER";
     public static final String GET_ALL_ANIME_OF_CREATOR = "GET_ALL_ANIME_OF_CREATOR";
 
+    public CreatorModel(){
+
+    }
+
     public void update(Anime anime, String token){
         Gson gson = new Gson();
         AnimeAndToken animeAndToken = new AnimeAndToken();

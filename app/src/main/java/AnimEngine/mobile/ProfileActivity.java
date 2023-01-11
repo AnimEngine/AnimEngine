@@ -32,6 +32,10 @@ import AnimEngine.mobile.classes.Creator;
 import AnimEngine.mobile.classes.Fan;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.CreatorModel;
+import AnimEngine.mobile.models.DBAndStorageModel;
+import AnimEngine.mobile.models.FanModel;
+import AnimEngine.mobile.util.InitialContext;
+import AnimEngine.mobile.util.ModelLocator;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener, Observer {
 
@@ -39,6 +43,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     UserAndToken creator;
     Creator creatorObj;
 
+    ModelLocator modelLocator;
     CreatorModel model;
 
     UserAndToken fan;
@@ -83,7 +88,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         keyValuePairs = new ArrayList<>();
         animeList = new ArrayList<>();
 
-        model = new CreatorModel();
+        modelLocator = ((MyApplication)getApplication()).getModelLocator();
+
+        try {
+            model = (CreatorModel) modelLocator.getModel(InitialContext.CREATOR, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         model.addObserver(this);
 
         creator = (UserAndToken) getIntent().getSerializableExtra("creator");

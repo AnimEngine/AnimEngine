@@ -38,6 +38,8 @@ import AnimEngine.mobile.classes.User;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.DBAndStorageModel;
 import AnimEngine.mobile.models.FanModel;
+import AnimEngine.mobile.util.InitialContext;
+import AnimEngine.mobile.util.ModelLocator;
 
 public class CatalogActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener, Observer {
 
@@ -49,6 +51,7 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
     RecyclerView rv;
     CatalogRVAdapter catalogRVAdapter;
 
+    ModelLocator modelLocator;
     DBAndStorageModel model;
     boolean isCreator;
 
@@ -73,7 +76,13 @@ public class CatalogActivity extends AppCompatActivity implements NavigationBarV
 
         keyValuePairs = new ArrayList<>();
 
-        model = new DBAndStorageModel();
+        modelLocator = ((MyApplication)getApplication()).getModelLocator();
+
+        try {
+            model = (DBAndStorageModel) modelLocator.getModel(InitialContext.DBSTORAGE, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         model.addObserver(this);
         model.getAllAnime();
 

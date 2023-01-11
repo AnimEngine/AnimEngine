@@ -41,6 +41,8 @@ import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.DBAndStorageModel;
 import AnimEngine.mobile.models.FanModel;
 import AnimEngine.mobile.models.Model;
+import AnimEngine.mobile.util.InitialContext;
+import AnimEngine.mobile.util.ModelLocator;
 import AnimEngine.mobile.util.RunnableWithStatus;
 
 public class EngineActivity extends AppCompatActivity implements View.OnClickListener, NavigationBarView.OnItemSelectedListener, Observer {
@@ -51,6 +53,7 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
     UserAndToken fan;
     Fan fanObj;
 
+    ModelLocator modelLocator;
     DBAndStorageModel DBModel;
     FanModel fanModel;
 
@@ -70,8 +73,15 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         textViewAnimeName = findViewById(R.id.text_view_anime_name_engine);
         imageViewAnimeImage = findViewById(R.id.image_anime_engine);
 
-        DBModel = new DBAndStorageModel();
-        fanModel = new FanModel();
+        modelLocator = ((MyApplication)getApplication()).getModelLocator();
+
+        try {
+            DBModel = (DBAndStorageModel) modelLocator.getModel(InitialContext.DBSTORAGE, null);
+            fanModel = (FanModel)  modelLocator.getModel(InitialContext.FAN, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         DBModel.addObserver(this);
         fanModel.addObserver(this);
 

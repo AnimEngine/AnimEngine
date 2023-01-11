@@ -47,11 +47,15 @@ import AnimEngine.mobile.classes.Anime;
 import AnimEngine.mobile.classes.Genre;
 import AnimEngine.mobile.classes.UserAndToken;
 import AnimEngine.mobile.models.CreatorModel;
+import AnimEngine.mobile.models.DBAndStorageModel;
+import AnimEngine.mobile.util.InitialContext;
+import AnimEngine.mobile.util.ModelLocator;
 
 public class CreateActivity extends AppCompatActivity implements View.OnClickListener, Observer, NavigationBarView.OnItemSelectedListener {
 
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
+    ModelLocator modelLocator;
     CreatorModel model;
     UserAndToken creator;
 
@@ -92,7 +96,13 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
         TextInputLayout textInputLayoutNameDescription = findViewById(R.id.text_input_anime_description);
         animeDescription = textInputLayoutNameDescription.getEditText();
 
-        model = new CreatorModel();
+        modelLocator = ((MyApplication)getApplication()).getModelLocator();
+
+        try {
+            model = (CreatorModel) modelLocator.getModel(InitialContext.CREATOR, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         model.addObserver(this);
 
         animeImage = findViewById(R.id.image_create);
