@@ -5,7 +5,7 @@ const { auth } = require("firebase-admin/auth");
 const { user } = require("firebase-functions/v1/auth");
 const { error } = require("firebase-functions/logger");
 
-const serviceAccount = require('./animengine-fb858-bbf71017f530.json');
+const serviceAccount = require('./animengine-fb858-firebase-adminsdk-1l8jr-a00cb09e5c.json');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://animengine-fb858-default-rtdb.firebaseio.com/",
@@ -313,6 +313,8 @@ exports.editUser = functions.https.onRequest(async (request, response) => {
 
 
     const user = userObj["User"];
+    delete user["Email"];
+    delete user["Password"];
 
     var uid = await getUIDUsingToken(token).catch(error => {
         response.json({"data":{"error":`${error}`}});
@@ -555,9 +557,11 @@ exports.getBestKAnime = functions.https.onRequest(async (request, response) => {
     await fanRef.child(uid).get().then(dataSnapshot => {
         userObj=dataSnapshot.val()
     })
-    console.log("userObj",userObj);
+    //console.log("userObj",userObj);
 
     const blackListedAnimes = userObj["blacklist"];
+    const whiteListedAnimes = userObj["whitelist"];
+
     const userGenres = userObj["genres"];
     console.log("userGenres: ",userGenres);
 
@@ -571,28 +575,41 @@ exports.getBestKAnime = functions.https.onRequest(async (request, response) => {
                 name: object.name,
                 genres: object.genres
             };
-            if((blackListedAnimes == undefined) || (blackListedAnimes != null && !containsObject(object.name, blackListedAnimes)))
+            
+            var checkBlackList = blackListedAnimes != undefined && blackListedAnimes != null && blackListedAnimes[object.name] != undefined;
+            var checkWhiteList = whiteListedAnimes != undefined && whiteListedAnimes != null && whiteListedAnimes[object.name] != undefined;
+            if(object.name == 'Another'){
+                console.log("checkBlackList",checkBlackList);
+                console.log("checkWhiteList",checkWhiteList);
+            }
+
+            if(!checkBlackList && !checkWhiteList){
                 objects.push(animeObj);
+            }
         });
     }).catch(error => {
         response.json({"data":{"error":`${error}`}});
         return;
     });
 
-    console.log("objects: ",objects);
+    //console.log("objects: ",objects);
 
-    console.log("userGenres type", typeof(userGenres))
     const userGenresMap = new Map(Object.entries(userGenres));
-    const calcDistance = (animeObj) => {
+    console.log("userGenresMap", userGenresMap)
+    const calcDistance = (currAnimeObj) => {
         var sum = 0;
         userGenresMap.forEach((value, key) => {
-            sum += Math.abs(userGenresMap[key] - animeObj.genres[key])
+            // console.log("map value, key",value,key)
+            // console.log("curr value",currAnimeObj.genres[key])
+            var curr_value = currAnimeObj.genres[key]
+            if(curr_value != undefined && curr_value != null)
+                sum += Math.abs(value - currAnimeObj.genres[key])
         });
-
+        console.log("sum",sum);
         return sum;
     };
 
-    objects.sort((a, b) => {return calcDistance(a) - calcDistance(b);})
+    objects = objects.sort((a, b) => calcDistance(a) - calcDistance(b))
     const animeNames = objects.map(x => x.name);
 
     response.json({"data":{"ok":JSON.stringify(animeNames)}});
@@ -706,4 +723,3 @@ exports.uploadComment =functions.https.onRequest(async (request, response) => {
         });
 
 });
-
