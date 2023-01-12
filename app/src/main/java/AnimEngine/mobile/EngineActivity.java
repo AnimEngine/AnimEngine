@@ -1,5 +1,7 @@
 package AnimEngine.mobile;
 
+import static AnimEngine.mobile.util.Helper.createGenresHashMap;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -127,63 +129,17 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
     private void displayFirstAnime(Anime anime){
-        Picasso.get().load(anime.getImageURL()).into(imageViewAnimeImage, new Callback() {
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });
+        Picasso.get().load(anime.getImageURL()).into(imageViewAnimeImage);
         textViewAnimeName.setText(anime.getName());
         currentAnime = anime;
     }
 
     @Override
     public void onClick(View view){
-        if(view == findViewById(R.id.button_show_information)){
-            // Create the object of AlertDialog Builder class
-            AlertDialog.Builder builder = new AlertDialog.Builder(EngineActivity.this);
-
-            // Set Alert Title
-            builder.setTitle("Description");
-
-            // Set the message show for the Alert time
-            builder.setMessage("Several hundred years ago, humans were nearly exterminated by giants. Giants are typically several stories tall, seem to have no intelligence, devour human beings and, worst of all, seem to do it for the pleasure rather than as a food source. A small percentage of humanity survived by walling themselves in a city protected by extremely high walls, even taller than the biggest of giants. Flash forward to the present and the city has not seen a giant in over 100 years. Teenage boy Eren and his foster sister Mikasa witness something horrific as the city walls are destroyed by a super giant that appears out of thin air. As the smaller giants flood the city, the two kids watch in horror as their mother is eaten alive. Eren vows that he will murder every single giant and take revenge for all of mankind.");
-
-
-            // Set Cancelable false for when the user clicks on the outside the Dialog Box then it will remain show
-            builder.setCancelable(false);
-
-            // Set the Negative button with No name Lambda OnClickListener method is use of DialogInterface interface.
-            builder.setNegativeButton("close", (DialogInterface.OnClickListener) (dialog, which) -> {
-                // If user click no then dialog box is canceled.
-                dialog.cancel();
-            });
-
-            // Create the Alert dialog
-            AlertDialog alertDialog = builder.create();
-            // Show the Alert Dialog box
-            alertDialog.show();
-        }
 
         if(view == findViewById(R.id.button_not_watch_later_anime)){
             blacklist.put(currentAnime.getName(), currentAnime.getName());
             displayNextAnime();
-        }
-
-        if(view == findViewById(R.id.button_add_comment)){
-//            TextInputLayout contentInput = findViewById(R.id.button_send_comment);
-//            content = contentInput.getEditText();
-//            assert content != null;
-
-
-//            float ratingValue =  stars.getRating();
-//
-//            fanModel.uploadComment(new Comment("Another", content.getText().toString(), ratingValue, fan.getToken()));
         }
 
         if(view == findViewById(R.id.button_watch_later_anime)){
@@ -202,6 +158,12 @@ public class EngineActivity extends AppCompatActivity implements View.OnClickLis
 
         fanObj.setWhitelist(whitelist);
         fanObj.setBlacklist(blacklist);
+
+        HashMap<String, Float> currentGenres = fanObj.getGenres();
+        if(currentGenres == null)
+            currentGenres = createGenresHashMap(getApplicationContext());
+
+        fanObj.setGenres(currentGenres);
 
         fanModel.editFan(fanObj, fan.getToken());
 
