@@ -16,7 +16,7 @@ Technologies used:
 - Firebase Realtime Database
 - Firebase Authentication
 The backend is built in a serverless fashion Using _**Firebase Functions**_.  
-The serverless backend acts as an application server for the client to send requests to.
+The serverless backend acts as an application server for the client to send requests to.  
 
 The client only interacts with the serverless functions which then interact with the various _**Firebase Services**_.  
 
@@ -25,8 +25,8 @@ Currently, we only created an Android app client written in native Android with 
 In the future, we can create client applications for different platforms and connect them to the existing application server.
 
 
-## Preview
-### Fan
+# Preview
+## Fan
 <p align="center">
     <img src="Images/fan_engine.jpeg" alt="Engine" width="200" style="margin-right: 30px;" />
     <img src="Images/fan_catalog.jpeg" alt="Catalog" width="200" style="margin-right: 30px;" />
@@ -39,7 +39,7 @@ In the future, we can create client applications for different platforms and con
     <em>Profile: This is a user profile screen where you can edit your profile information or sign out of the system.</em>
 </p>
 
-### Creator
+## Creator
 <p align="center">
     <img src="Images/creator_add_anime.jpeg" alt="Add Anime" width="200" style="margin-right: 30px;" />
     <img src="Images/creator_catalog.jpeg" alt="Catalog" width="200" style="margin-right: 30px;" />
