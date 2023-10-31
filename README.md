@@ -14,4 +14,8 @@
 </p>
 
 ### Creator
-
+<p align="center">
+    <img src="Images/creator_add_anime.jpeg" alt="Engine" width="200" style="margin-right: 30px;" />
+    <img src="Images/creator_catalog.jpeg" alt="Catalog" width="200" style="margin-right: 30px;" />
+    <img src="Images/creator_profile.jpeg" alt="Profile" width="200" />
+</p>
