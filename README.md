@@ -2,11 +2,10 @@
 ## Preview
 ### Fan
 <p align="center">
-    <img src="Images/fan_engine.jpeg" alt="Engine" width="100" style="margin-right: 10px;" />
-    <img src="Images/fan_catalog.jpeg" alt="Catalog" width="100" style="margin-right: 10px;" />
-    <img src="Images/fan_profile.jpeg" alt="Profile" width="100" />
+    <img src="Images/fan_engine.jpeg" alt="Engine" width="200" style="margin-right: 10px;" />
+    <img src="Images/fan_catalog.jpeg" alt="Catalog" width="200" style="margin-right: 10px;" />
+    <img src="Images/fan_profile.jpeg" alt="Profile" width="200" />
 </p>
-![Screenshot](Images/fan_catalog.jpeg)
 
 ### Creator
 
